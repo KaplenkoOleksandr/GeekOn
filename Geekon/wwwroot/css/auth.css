@@ -1,0 +1,193 @@
+﻿.gradient {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background: rgb(8,15,11);
+    background: linear-gradient(34deg, rgba(8,15,11,1) 0%, rgba(43,74,43,1) 100%);
+    height: 100vh;
+    width: 100%;
+}
+
+.log-sign-in-modal {
+    background-image: url('../images/forest.jpg');
+    background-size: cover;
+    height: 70vh;
+    width: 60%;
+    display: flex;
+}
+
+.log-sign-in-container {
+    height: 100%;
+    width: 50%;
+}
+
+.auth-central-button {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    float: left;
+    width: 30px;
+    height: 45px;
+    background: black;
+    border-radius: 100%;
+}
+
+.upper-arrow {
+    height: 10px;
+    width: 3px;
+    background-color: aliceblue;
+    transform: rotate(-30deg) translateY(2px);
+}
+
+.lower-arrow {
+    height: 10px;
+    width: 3px;
+    background-color: aliceblue;
+    transform: rotate(30deg) translateY(-2px);
+}
+
+.arrow-move-upper {
+    transform: rotate(30deg) translateY(2px);
+}
+
+.arrow-move-lower {
+    transform: rotate(-30deg) translateY(-2px);
+}
+
+.auth-central-button-animation {
+    animation: knopochka-huyarit 1s;
+}
+
+@keyframes knopochka-huyarit {
+    from {
+        transform: rotate(180deg);
+        opacity:1;
+    }
+    50% {
+        transform: rotate(360deg);
+        opacity:0;
+    }
+    to {
+        transform: translateX(0deg);
+        opacity:1;
+    }
+}
+
+@keyframes knopochka-huyarit-reverse {
+    from {
+        transform: rotate(-180deg);
+    }
+    50% {
+        transform: rotate(-360deg);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0deg);
+    }
+}
+
+@keyframes michael-jackson-reverse {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes michael-jackson {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0%);
+    }
+}
+/*============================================================*/
+.log-in {
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    animation-duration: 1s;
+    animation-name: michael-jackson;
+
+    padding:20px;
+}
+
+.sign-in {
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    animation-duration: 1s;
+    animation-name: michael-jackson-reverse;
+}
+/*============================================================*/
+
+.input-data {
+    height: 40px;
+    width: 100%;
+    position: relative;
+}
+
+.input-data input {
+    height: 100%;
+    width: 100%;
+    border: none;
+    font-size: 17px;
+    border-bottom: 2px solid silver;
+    background-color:transparent;
+    color:white;
+}
+
+    .input-data input:focus ~ label,
+    .input-data input:valid ~ label {
+        transform: translateY(-20px);
+        font-size: 15px;
+        color: #3f9617;
+    }
+
+.input-data label {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.input-data .underline {
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    bottom: 0;
+}
+
+    .input-data .underline:before {
+        position: absolute;
+        content: "";
+        height: 100%;
+        width: 100%;
+        background: #3f9617;
+        transform: scaleX(0);
+        transform-origin: center;
+        transition: transform 0.3s ease;
+    }
+
+.input-data input:focus ~ .underline:before,
+.input-data input:valid ~ .underline:before {
+    transform: scaleX(1);
+}
+
+.log-sign-in-button {
+    padding: 10px 20px 10px 20px;
+    border-radius: 20px;
+    background-color: #3f9617;
+    align-self: center;
+    border: none;
+}

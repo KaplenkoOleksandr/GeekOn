@@ -1,0 +1,50 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Areas/Identity/Pages/_AuthLayout.cshtml";
+}
+
+<div class="log-sign-in-container"></div>
+<div class="log-sign-in-container"  style="color:white">
+    <div id="sign-in" class="sign-in">
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post" style="display:flex;
+                                                align-items: flex-start; 
+                                                flex-direction:column; 
+                                                justify-content:space-around; 
+                                                height:100%; width:100%">
+            <h1>Create a new account.</h1>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="input-data">
+                <input asp-for="Input.Email" required />
+                <div class="underline"></div>
+                <label asp-for="Input.Email"></label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="input-data">
+                <input asp-for="Input.Password" required>
+                <div class="underline"></div>
+                <label asp-for="Input.Password"></label>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="input-data">
+                <input asp-for="Input.ConfirmPassword" required>
+                <div class="underline"></div>
+                <label asp-for="Input.ConfirmPassword"></label>
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <button type="submit" class="log-sign-in-button">Register</button>
+        </form>
+    </div>
+</div>
+
+<div class="auth-central-button auth-central-button-animation" style="cursor: pointer;" onclick="window.location='/Identity/Account/Login';">
+    <div class="auth-central-button-animation">
+        <div id="upper-arrow" class="upper-arrow arrow-move-upper"></div>
+        <div id="lower-arrow" class="lower-arrow arrow-move-lower"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
