@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace Geekon.Models
 {
-    public class Project
+    public class Projects
     {
         public int ProjectId { get; set; }
         public string Creator { get; set; }
-        public virtual ICollection<Task> Tasks { get; set; }
+        public virtual ICollection<Tasks> Tasks { get; set; }
     }
 }

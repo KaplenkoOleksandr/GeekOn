@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Geekon.Models
 {
-    public class Subtask
+    public class Subtasks
     {
         public int SubtaskId { get; set; }
         public string SubtaskName { get; set; }
