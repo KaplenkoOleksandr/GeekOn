@@ -53,11 +53,20 @@ namespace Geekon.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProjectId,CreatorId")] Projects projects)
+        public async Task<IActionResult> Create([Bind("ProjectId,ProjName,ProjImagePath")] Projects projects, string creatorId)
         {
+            projects.CreatorId = creatorId;
             if (ModelState.IsValid)
             {
+                // add Project - User row
+                ProjectUsers projectUser = new ProjectUsers();
+                projectUser.Project = projects;
+                projectUser.ProjectId = projects.ProjectId;
+                projectUser.UserId = projects.CreatorId;
+                _context.ProjectUsers.Add(projectUser);
+
                 _context.Add(projects);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

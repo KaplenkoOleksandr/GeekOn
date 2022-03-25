@@ -10,7 +10,7 @@ namespace Geekon.Models
     {
         [Key]
         public int ProjectId { get; set; }
-        public int CreatorId { get; set; } // user id
+        public string CreatorId { get; set; } // user id
         public string ProjName { get; set; }
         public string ProjImagePath { get; set; }
         public string ProjFolderLink { get; set; }
