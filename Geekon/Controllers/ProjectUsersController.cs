@@ -19,9 +19,9 @@ namespace Geekon.Controllers
         }
 
         // GET: ProjectUsers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string userId)
         {
-            var geekOnDBContext = _context.ProjectUsers.Include(p => p.Project);
+            var geekOnDBContext = _context.ProjectUsers.Where(u => u.UserId == userId).Include(p => p.Project);
             return View(await geekOnDBContext.ToListAsync());
         }
 
