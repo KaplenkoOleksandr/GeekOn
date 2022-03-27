@@ -1,5 +1,6 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
 * {
     outline: none;
     margin: 0;
@@ -118,4 +119,107 @@ html {
     background-image: url('../images/forest.jpg');
     height:inherit;
     width:inherit;
+}
+
+.projContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+}
+
+.proj {
+    position: relative;
+    margin: 20px 20px 0 0;
+    width: 315px;
+    height: 230px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 1px 2px 2px grey;
+}
+
+.projSlider {
+    height: 220px;
+    width: 315px;
+    background-color: rgb(146,172,109);
+    transform: translateY(180px);
+}
+
+@keyframes projSliderAnimation {
+    from {
+        transform: translateY(180px);
+    }
+    to {
+        transform: translateY(60px);
+    }
+}
+
+.proj:hover .projSlider {
+    animation: 1s projSliderAnimation cubic-bezier(.6,-0.62,.38,1.53);
+    transform: translateY(60px);
+}
+
+.projName {
+    position: relative;
+    height: 50px;
+    font-size: 23px;
+    color: white;
+    font-family:'Times New Roman';
+    width:265px;
+    display:flex;
+    align-items:center;
+    margin-left: 15px;
+}
+
+.projLine {
+    background-color:white;
+    height: 0.5px;
+    width: 315px;
+}
+
+.projFolder {
+    position: absolute;
+    top: 188px;
+    left: 266px;
+    color: white;
+    font-size: 20px;
+    padding: 7px;
+}
+
+.projFolder:hover {
+    cursor: pointer;
+    padding: 7px;
+    background-color: white;
+    border-radius: 100%;
+    color: rgb(146,172,109);
+}
+
+.projCreationDate {
+    height: 34px;
+    width: 315px;
+    padding-left: 15px;
+    color: white;
+    font-weight: lighter;
+    font-size:14px;
+}
+
+.projOwnerInfo {
+    height: 90px;
+    width: 315px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 15px;
+    color: white;
+}
+
+.projOwnerPhoto {
+    height:70px;
+    width:70px;
+    margin-right:10px;
+    background-color:white;
+    border-radius:100%;
+}
+.projOwnerName {
+    font-weight:400;
+    font-size:20px;
 }
