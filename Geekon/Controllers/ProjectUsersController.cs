@@ -26,7 +26,7 @@ namespace Geekon.Controllers
         {
             string userId = _userManager.GetUserId(User);
 
-            var geekOnDBContext = _context.ProjectUsers.Where(u => u.UserId == userId).Include(p => p.Project).Include(p => p.Project.DateCreate.ToString("dd.mm.yyyy z UTC"));
+            var geekOnDBContext = _context.ProjectUsers.Where(u => u.UserId == userId).Include(p => p.Project);
             return View(await geekOnDBContext.ToListAsync());
         }
 
