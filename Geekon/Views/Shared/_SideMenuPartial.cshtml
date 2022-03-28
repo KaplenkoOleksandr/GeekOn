@@ -1,6 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> userManager
 
 <link href="~/css/sideMenuPartial.css" rel="stylesheet" />
 <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
@@ -17,7 +16,7 @@
             <span class="tooltip">Search</span>
         </li>
         <li>
-            <a asp-controller="Projects" asp-action="Index" asp-route-userId="@userManager.GetUserId(User)">
+            <a asp-controller="ProjectUsers" asp-action="Index">
                 <i class='bx bx-grid-alt'></i>
                 <span class="links_name">Progects</span>
             </a>
