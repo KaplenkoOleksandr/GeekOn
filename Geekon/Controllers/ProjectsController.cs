@@ -19,9 +19,14 @@ namespace Geekon.Controllers
         }
 
         // GET: Projects
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
-            return View(await _context.Projects.ToListAsync());
+            var _projContext = _context.Projects.Where(p => p.ProjectId == id);
+
+            if (_projContext == null)
+                return NotFound();
+
+            return View(_projContext);
         }
 
         // GET: Projects/Details/5
@@ -53,9 +58,10 @@ namespace Geekon.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProjectId,ProjName,ProjImagePath")] Projects projects, string creatorId)
+        public async Task<IActionResult> Create([Bind("ProjectId,CreatorId,ProjName,ProjImagePath")] Projects projects)
         {
-            projects.CreatorId = creatorId;
+            //projects.CreatorId = creatorId;
+            projects.DateCreate = DateTimeOffset.Now;
             if (ModelState.IsValid)
             {
                 // add Project - User row

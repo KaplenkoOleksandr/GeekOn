@@ -6,22 +6,27 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Geekon.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Geekon.Controllers
 {
     public class ProjectUsersController : Controller
     {
         private readonly GeekOnDBContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ProjectUsersController(GeekOnDBContext context)
+        public ProjectUsersController(GeekOnDBContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: ProjectUsers
-        public async Task<IActionResult> Index(string userId)
+        public async Task<IActionResult> Index()
         {
-            var geekOnDBContext = _context.ProjectUsers.Where(u => u.UserId == userId).Include(p => p.Project);
+            string userId = _userManager.GetUserId(User);
+
+            var geekOnDBContext = _context.ProjectUsers.Where(u => u.UserId == userId).Include(p => p.Project).Include(p => p.Project.DateCreate.ToString("dd.mm.yyyy z UTC"));
             return View(await geekOnDBContext.ToListAsync());
         }
 
