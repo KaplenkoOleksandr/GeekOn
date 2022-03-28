@@ -139,6 +139,11 @@ namespace Geekon.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var tasks = await _context.Tasks.FindAsync(id);
+
+            //delete all subtasks from task
+            foreach (var s in tasks.Subtasks)
+                _context.Subtasks.Remove(s);
+            //delete task
             _context.Tasks.Remove(tasks);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
