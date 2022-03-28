@@ -223,3 +223,38 @@ html {
     font-weight:400;
     font-size:20px;
 }
+
+@keyframes projCreate-plus-rotate {
+    from {
+        transform: rotate(0deg) ;
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.projCreate {
+    cursor:pointer;
+}
+
+.projCreate:hover .bxs-plus-circle {
+    animation: 1s projCreate-plus-rotate ease-in-out;
+}
+
+/*////////////////////////////////////////////////////////////////////////*/
+
+/* width */
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #1d1b31;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 7px;
+}
