@@ -251,6 +251,7 @@ html {
 /* Track */
 ::-webkit-scrollbar-track {
     background: #1d1b31;
+    border-radius: 7px;
 }
 
 /* Handle */
@@ -258,3 +259,37 @@ html {
     background: #555;
     border-radius: 7px;
 }
+
+.modalCreateProj {
+    width:1000px;
+    height:700px;
+
+}
+
+.swiper {
+    width: 654px;
+    height: 229px;
+    margin-bottom:50px;
+}
+
+.swiper-pagination-bullet-active {
+    background-color:white;
+}
+
+.swiper-pagination-bullet {
+    background-color: #edffdf;
+}
+
+.swiper-slide {
+    opacity: 0.5;
+    transition: 0.5s;
+}
+
+.swiper-slide-active {
+    transform: scale(1.5);
+    transition: 0.5s;
+    opacity: 1;
+}
+
+/*/////////////////////////////////////////////////////////*/
+

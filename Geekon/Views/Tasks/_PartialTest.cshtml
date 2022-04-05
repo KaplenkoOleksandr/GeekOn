@@ -1,0 +1,15 @@
+﻿@model IEnumerable<Geekon.Models.Tasks>
+
+
+@for (var i = 0; i < 5; i++)
+{
+<div class="item">
+    <div class="sub-item-container">
+        @for (var j = 0; j < i+3; j++)
+        {
+            <div class="sub-item"></div>
+        }
+    </div>
+</div>
+}
+

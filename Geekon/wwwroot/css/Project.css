@@ -1,0 +1,47 @@
+﻿.grid-cont {
+    background: url("../projBack/forest2.jpg");
+
+    background-size:cover;
+    background-repeat:no-repeat;
+}
+.items {
+    position: relative;
+    width: 100%;
+    overflow-x: scroll;
+    white-space: nowrap;
+    transition: all 0.2s;
+    transform: scale(0.98);
+    height: 100vh;
+}
+
+.items.active {
+    background: rgba(255,255,255,0.2);
+    transform: scale(1);
+}
+
+.item {
+    display: inline-block;
+    background-color: #bbbbbbad;
+    min-height: 250px;
+    max-height: 90vh;
+    width: 300px;
+    margin: 20px 10px;
+    overflow: hidden;
+    vertical-align: top;
+    border-radius: 10px;
+}
+
+.sub-item-container {
+
+    overflow-x: hidden;
+    max-height: inherit;
+    padding-right:20px;
+}
+
+.sub-item {
+    height: 50px;
+    width: 100%;
+    background-color: rgb(15 49 28);
+    margin: 10px;
+    border-radius: 10px;
+}

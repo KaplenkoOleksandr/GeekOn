@@ -6,16 +6,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Geekon.Models;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.FileProviders;
 
 namespace Geekon.Controllers
 {
     public class ProjectsController : Controller
     {
         private readonly GeekOnDBContext _context;
+        private readonly IWebHostEnvironment _env;
 
-        public ProjectsController(GeekOnDBContext context)
+        public ProjectsController(GeekOnDBContext context, IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
         // GET: Projects
@@ -50,7 +55,17 @@ namespace Geekon.Controllers
         // GET: Projects/Create
         public IActionResult Create()
         {
-            return View();
+            var provider = new PhysicalFileProvider(_env.WebRootPath);
+            var contents = provider.GetDirectoryContents("projBack");
+            var objFiles = contents.OrderBy(m => m.LastModified);
+
+            List<string> projBack = new List<string>();
+            foreach (var item in objFiles.ToList())
+            {
+                projBack.Add(item.Name);
+            }
+            ViewData["projBack"] = projBack;
+            return PartialView("_ProjectCreatePartial");
         }
 
         // POST: Projects/Create

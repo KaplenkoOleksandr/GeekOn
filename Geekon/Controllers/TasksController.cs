@@ -21,7 +21,7 @@ namespace Geekon.Controllers
         // GET: Tasks
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Tasks.ToListAsync());
+            return PartialView("_PartialTest");
         }
 
         // GET: Tasks/Details/5
