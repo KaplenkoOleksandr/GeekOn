@@ -10,12 +10,16 @@ namespace Geekon.Models
     {
         [Key]
         public int SubtaskId { get; set; }
+        [Required]
+        [Display(Name = "Task name")]
         public string SubtaskName { get; set; }
         public TaskStatus Status { get; set; }
 
-        public int UserId { get; set; }
-        //public ICollection<User> Users { get; set; }
+        public string ExecutorId { get; set; } //Id of User, who will make it subtask
+        [DataType(DataType.Date)]
+        [Display(Name = "Deadline")]
         public DateTime Date { get; set; }
+        [Display(Name = "Comment")]
         public string Comment { get; set; }
     }
 

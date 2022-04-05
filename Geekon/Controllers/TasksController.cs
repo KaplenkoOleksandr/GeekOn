@@ -6,22 +6,44 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Geekon.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Geekon.Controllers
 {
     public class TasksController : Controller
     {
         private readonly GeekOnDBContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public TasksController(GeekOnDBContext context)
+        public TasksController(GeekOnDBContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Tasks
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
-            return View(await _context.Tasks.ToListAsync());
+            if (id == null)
+                return NotFound();
+
+            var _taskContext = await _context.Tasks.FirstOrDefaultAsync(t => t.TaskId == id);
+
+            if (_taskContext == null)
+                return NotFound();
+
+            var proj = from p in _context.Projects
+                       where p.Tasks.Contains(_taskContext)
+                       select p;
+
+            var access = from ac in _context.ProjectUsers
+                       where ac.UserId == _userManager.GetUserId(User) && ac.ProjectId == proj.FirstOrDefault().ProjectId 
+                       select ac;
+
+            if (access.Count() == 0)
+                return NoContent();
+
+            return View(_taskContext);
         }
 
         // GET: Tasks/Details/5
@@ -53,11 +75,17 @@ namespace Geekon.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TaskId,TaskName")] Tasks tasks)
+        public async Task<IActionResult> Create([Bind("TaskId,TaskName")] Tasks tasks, int? projId)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(tasks);
+
+                //add task into proj
+                var proj = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == projId);
+                proj.Tasks.Add(tasks);
+                _context.Update(proj);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

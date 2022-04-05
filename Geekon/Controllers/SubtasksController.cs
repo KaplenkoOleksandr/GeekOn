@@ -6,38 +6,60 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Geekon.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Geekon.Controllers
 {
     public class SubtasksController : Controller
     {
         private readonly GeekOnDBContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public SubtasksController(GeekOnDBContext context)
+        public SubtasksController(GeekOnDBContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Subtasks
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
-            return View(await _context.Subtasks.ToListAsync());
+            if (id == null)
+                return NotFound();
+
+            var _subtaskContext = await _context.Subtasks.FirstOrDefaultAsync(s => s.SubtaskId == id);
+
+            if (_subtaskContext == null)
+                return NotFound();
+
+            return View(_subtaskContext);
         }
 
         // GET: Subtasks/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            var subtasks = await _context.Subtasks
-                .FirstOrDefaultAsync(m => m.SubtaskId == id);
+            var subtasks = await _context.Subtasks.FirstOrDefaultAsync(s => s.SubtaskId == id);
+
             if (subtasks == null)
-            {
                 return NotFound();
-            }
+
+            var task = from t in _context.Tasks
+                       where t.Subtasks.Contains(subtasks)
+                       select t;
+
+            var proj = from p in _context.Projects
+                       where p.Tasks.Contains(task.FirstOrDefault())
+                       select p;
+
+            var access = from ac in _context.ProjectUsers
+                         where ac.UserId == _userManager.GetUserId(User) && ac.ProjectId == proj.FirstOrDefault().ProjectId
+                         select ac;
+
+            if (access.Count() == 0)
+                return NoContent();
 
             return View(subtasks);
         }
@@ -53,11 +75,18 @@ namespace Geekon.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SubtaskId,SubtaskName,Status,UserId,Date,Comment")] Subtasks subtasks)
+        public async Task<IActionResult> Create([Bind("SubtaskId,SubtaskName,Date,Comment")] Subtasks subtasks, int? taskId)
         {
+            subtasks.Status = Models.TaskStatus.ToDo;
             if (ModelState.IsValid)
             {
                 _context.Add(subtasks);
+
+                //add subtask into task
+                var task = await _context.Tasks.FirstOrDefaultAsync(t => t.TaskId == taskId);
+                task.Subtasks.Add(subtasks);
+                _context.Update(task);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

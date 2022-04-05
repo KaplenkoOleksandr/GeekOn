@@ -24,10 +24,20 @@ namespace Geekon.Controllers
         // GET: Projects
         public async Task<IActionResult> Index(int? id)
         {
-            var _projContext = _context.Projects.Where(p => p.ProjectId == id);
+            if (id == null)
+                return NotFound();
+
+            var _projContext = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == id);
 
             if (_projContext == null)
                 return NotFound();
+
+            var access = from ac in _context.ProjectUsers
+                       where ac.UserId == _userManager.GetUserId(User) && ac.ProjectId == id
+                       select ac;
+
+            if (access.Count() == 0)
+                return NoContent();
 
             return View(_projContext);
         }
@@ -103,7 +113,7 @@ namespace Geekon.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProjectId,CreatorId")] Projects projects)
+        public async Task<IActionResult> Edit(int id, [Bind("ProjectId,ProjName,ProjImagePath")] Projects projects)
         {
             if (id != projects.ProjectId)
             {
