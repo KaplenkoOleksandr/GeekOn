@@ -11,8 +11,12 @@ namespace Geekon.Models
         [Key]
         public int ProjectId { get; set; }
         public string CreatorId { get; set; } // user id
+        [Required]
+        [Display(Name = "Name of project")]
         public string ProjName { get; set; }
+        [DataType(DataType.Date)]
         public DateTimeOffset DateCreate { get; set; }
+        [Display(Name = "Project image")]
         public string ProjImagePath { get; set; }
         public string ProjFolderLink { get; set; }
         public virtual ICollection<Tasks> Tasks { get; set; }
