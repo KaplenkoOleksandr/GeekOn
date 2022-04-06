@@ -40,8 +40,9 @@ $(function () {
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 $.ajax({
+    
     type: "GET",
-    url: "/Tasks",
+    url: "/Tasks/" + $("#placeholderForTasks").data-id,
     success: function (res) {
         $("#placeholderForTasks").html(res)
     }

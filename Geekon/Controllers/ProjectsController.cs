@@ -30,7 +30,7 @@ namespace Geekon.Controllers
         public async Task<IActionResult> Index(int? id)
         {
             if (id == null)
-                return NotFound();
+                return View();
 
             var _projContext = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == id);
 
@@ -102,7 +102,7 @@ namespace Geekon.Controllers
                 _context.Add(projects);
 
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", new { id = projects.ProjectId });
             }
             return View(projects);
         }

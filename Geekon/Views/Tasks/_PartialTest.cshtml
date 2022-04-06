@@ -1,15 +1,103 @@
 ﻿@model IEnumerable<Geekon.Models.Tasks>
 
 
-@for (var i = 0; i < 5; i++)
-{
-<div class="item">
+
+
+<div class="item" onmousedown="stopProp(event)">
+    <div class="item-name-text">
+        Test Project
+        <div class="item-options-lines">
+            <i class='bx bx-menu lines' id="btn"></i>
+        </div>
+    </div>
     <div class="sub-item-container">
-        @for (var j = 0; j < i+3; j++)
+        <div class="sub-item myy">
+            <div class="sub-item-header">
+                <div class="sub-item-name">Sub name</div>
+                <div class="sub-item-date">24.06.2001</div>
+            </div>
+            <div class="sub-item-progress">
+                <i class='bx bx-bug'></i>
+            </div>
+        </div>
+        <div class="sub-item">
+            <div class="sub-item-header">
+                <div class="sub-item-name">Sub name</div>
+                <div class="sub-item-date">24.06.2001</div>
+            </div>
+            <div class="sub-item-progress">
+                <i class='bx bxs-hourglass'></i>
+            </div>
+        </div>
+        <div class="sub-item">
+            <div class="sub-item-header">
+                <div class="sub-item-name">Sub name</div>
+                <div class="sub-item-date">24.06.2001</div>
+            </div>
+            <div class="sub-item-progress">
+                <i class='bx bx-square'></i>
+            </div>
+        </div>
+        <div class="sub-item">
+            <div class="sub-item-header">
+                <div class="sub-item-name">Sub name</div>
+                <div class="sub-item-date">24.06.2001</div>
+            </div>
+            <div class="sub-item-progress">
+                <i class='bx bx-check-square'></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@for (var i = 0; i < 9; i++)
+{
+<div class="item" onmousedown="stopProp(event)">
+    <div class="item-name-text">
+        Test Project
+        <div class="item-options-lines">
+            <i class='bx bx-menu lines' id="btn"></i>
+        </div>
+    </div>
+    <div class="sub-item-container">
+        @for (var j = 0; j < i + 9; j++)
         {
-            <div class="sub-item"></div>
+        <div class="sub-item">
+            <div class="sub-item-header">
+                <div class="sub-item-name">Sub name</div>
+                <div class="sub-item-date">24.06.2001</div>
+            </div>
+            <div class="sub-item-progress">
+                <i class='bx bx-bug'></i>
+            </div>
+        </div>
         }
     </div>
 </div>
 }
 
+<script>
+
+    function stopProp(event) {
+        event.stopPropagation();
+    }
+
+    var sub_item_progress = document.getElementsByClassName('sub-item-progress');
+    [].forEach.call(sub_item_progress, function (el) {
+        el.addEventListener('mouseover', function (e) {
+            let firstChild = el.children[0];
+            firstChild.classList.toggle('bx-tada');
+        })
+    });
+
+    [].forEach.call(sub_item_progress, function (el) {
+        el.addEventListener('mouseout', function (e) {
+            let firstChild = el.children[0];
+            firstChild.classList.toggle('bx-tada');
+        })
+    });
+</script>

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Geekon.Models.Projects>
+﻿@model Geekon.Models.Projects
 
 @{
     ViewData["Title"] = "Index";
@@ -8,7 +8,7 @@
 
 <div class="grid-cont">
     <div class="grid-item main">
-        <div id="placeholderForTasks" class="items"></div>
+        <div id="placeholderForTasks" data-id="@Model.ProjectId" class="items"></div>
     </div>
 </div>
 

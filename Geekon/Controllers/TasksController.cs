@@ -25,7 +25,8 @@ namespace Geekon.Controllers
         public async Task<IActionResult> Index(int? id)
         {
             if (id == null)
-                return NotFound();
+                return PartialView("_PartialTest");
+                //return NotFound();
 
             var _taskContext = await _context.Tasks.FirstOrDefaultAsync(t => t.TaskId == id);
 
@@ -43,8 +44,8 @@ namespace Geekon.Controllers
             if (access.Count() == 0)
                 return NoContent();
 
-            //return View(_taskContext);
-            return PartialView("_PartialTest");
+            return View(_taskContext);
+            
         }
 
         // GET: Tasks/Details/5
