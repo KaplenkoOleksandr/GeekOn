@@ -6,6 +6,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\projBack\dark_office1.jpg" />
+    <Content Remove="wwwroot\projBack\dark_office2.jpg" />
+    <Content Remove="wwwroot\projBack\flowers1.webp" />
+    <Content Remove="wwwroot\projBack\gradient1.jpg" />
+    <Content Remove="wwwroot\projBack\gradient2.jpg" />
+    <Content Remove="wwwroot\projBack\night.webp" />
+    <Content Remove="wwwroot\projBack\ocean2.jpg" />
+    <Content Remove="wwwroot\projBack\office2.jpg" />
+    <Content Remove="wwwroot\projBack\penguin.jpg" />
+    <Content Remove="wwwroot\projBack\sunset.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.12" />
