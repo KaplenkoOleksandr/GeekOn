@@ -10,6 +10,11 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Identity;
+using Google.Apis.Drive.v3;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Services;
+using System.Threading;
+using Google.Apis.Util.Store;
 
 namespace Geekon.Controllers
 {
@@ -38,8 +43,8 @@ namespace Geekon.Controllers
                 return NotFound();
 
             var access = from ac in _context.ProjectUsers
-                       where ac.UserId == _userManager.GetUserId(User) && ac.ProjectId == id
-                       select ac;
+                         where ac.UserId == _userManager.GetUserId(User) && ac.ProjectId == id
+                         select ac;
 
             if (access.Count() == 0)
                 return NoContent();
@@ -205,5 +210,67 @@ namespace Geekon.Controllers
         {
             return _context.Projects.Any(e => e.ProjectId == id);
         }
+
+
+
+
+        string[] scopes = { DriveService.Scope.Drive };
+        string appName = "GeekOn";
+
+
+        public void GetPath()
+        {
+            UserCredential credential;
+            credential = GetCredentials();
+
+            //create Service
+            var service = new DriveService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = appName
+            });
+
+            CreateFolder("folderrrrrrrrr", service);
+
+        }
+
+        private void CreateFolder(string folderName, DriveService service)
+        {
+            var fileMetadata = new Google.Apis.Drive.v3.Data.File()
+            {
+                Name = folderName,
+                MimeType = "application/vnd.google-apps.folder"
+            };
+            var request = service.Files.Create(fileMetadata);
+            request.Fields = "id";
+            var file = request.Execute();
+
+        }
+
+        public UserCredential GetCredentials()
+        {
+            UserCredential credential;
+
+            using (var stream = new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
+            {
+
+                string credPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+                credPath = Path.Combine(credPath, ".credentials/drive-dotnet-quikstart.json");
+
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    GoogleClientSecrets.FromStream(stream).Secrets,
+                    scopes,
+                    "user",
+                    CancellationToken.None,
+                    new FileDataStore(credPath, true)).Result;
+            }
+
+            return credential;
+
+        }
+
+
+
+
     }
 }
