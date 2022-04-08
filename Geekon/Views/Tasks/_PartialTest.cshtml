@@ -1,15 +1,156 @@
 ﻿@model IEnumerable<Geekon.Models.Tasks>
 
-
-@for (var i = 0; i < 5; i++)
+@foreach (var task in Model)
 {
-<div class="item">
-    <div class="sub-item-container">
-        @for (var j = 0; j < i+3; j++)
-        {
-            <div class="sub-item"></div>
-        }
+    <div class="item" onmousedown="stopProp(event)">
+        <div class="item-name-text">
+            @task.TaskName
+            <div class="item-options-lines">
+                <i class='bx bx-menu lines' id="btn"></i>
+            </div>
+        </div>
+        <div class="sub-item-container">
+            @foreach (var sub in task.Subtasks.Distinct())
+            {
+                <div class="sub-item" onclick="OPEN_MODAL_SUBTASK_EDIT(@sub.SubtaskId)">
+                    <div class="sub-item-header">
+                        <div class="sub-item-name">@sub.SubtaskName</div>
+                        <div class="sub-item-date">@sub.Date</div>
+                    </div>
+                    <div class="sub-item-progress">
+                        @if (sub.Status == Geekon.Models.TaskStatus.ToDo)
+                        {<i class='bx bx-square'></i>}
+                        @if (sub.Status == Geekon.Models.TaskStatus.Finished)
+                        {<i class='bx bx-check-square'></i>}
+                        @if (sub.Status == Geekon.Models.TaskStatus.InProgress)
+                        {<i class='bx bxs-hourglass'></i>}
+                        @if (sub.Status == Geekon.Models.TaskStatus.Blocked)
+                        {<i class='bx bx-bug'></i>}
+                    </div>
+                </div>
+            }
+
+            @*SUBTASK ADD SQUARE*@
+            <div class="sub-item sub-item-create" onclick="POST_CREATE_SUBTASK(@task.TaskId, @ViewBag.projId)">
+                <i class='bx bx-plus'></i>
+                <div>Add new task</div>
+            </div>
+
+        </div>
     </div>
-</div>
 }
 
+@*TASK ADD SQUARE*@
+<a class="item-create" onclick="POST_CREATE_TASK(@ViewBag.projId)" onmousedown="stopProp(event)">
+    <div class="item-create-content">
+        <i class='bx bx-plus'></i>
+        <div>Add new category</div>
+    </div>
+</a>
+
+<script>
+
+    function stopProp(event) {
+        event.stopPropagation();
+    }
+
+    function SUBMIT_MODAL_SUBTASK_EDIT (event) {
+        event.preventDefault();
+        console.log("success");
+        var data = $("#edit-subtask-form").serialize();
+        $.ajax({
+            type: "POST",
+            url: "/Subtasks/Edit",
+            data: data,
+            success: function (res) {
+                $("#editSubtaskPlaceholder").find('.modal').modal('hide');
+                $("#editSubtaskPlaceholder").html(res);
+                $("#editSubtaskPlaceholder").find('.modal').modal('show');
+                $.ajax({
+                    type: "GET",
+                    url: "/Tasks",
+                    data: {
+                        projId: @ViewBag.projId,
+                    },
+                    success: function (res) {
+                        $("#placeholderForTasks").html(res);
+                    }
+                })
+            }
+        })
+    }
+
+    function OPEN_MODAL_SUBTASK_EDIT(id) {
+        $('#editSubtaskPlaceholder').appendTo("body");
+        $.ajax({
+            type: "GET",
+            url: "/Subtasks/Edit",
+            data: {
+                id: id,
+            },
+            success: function (res) {
+                $("#editSubtaskPlaceholder").html(res);
+                $("#editSubtaskPlaceholder").find('.modal').modal('show');
+            }
+        })
+    }
+
+    function POST_CREATE_SUBTASK(taskId, projId) {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Create", "Subtasks")',
+            data: {
+                taskId: taskId,
+            },
+            success: function () {
+                $.ajax({
+                    type: "GET",
+                    url: "/Tasks",
+                    data: {
+                        projId: projId,
+                    },
+                    success: function (res) {
+                        $("#placeholderForTasks").html(res);
+                    }
+                })
+            }
+        })
+    }
+
+    function POST_CREATE_TASK(projId) {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Create", "Tasks")',
+            data: {
+                projId: projId,
+            },
+            success: function () {
+                $.ajax({
+                    type: "GET",
+                    url: "/Tasks",
+                    data: {
+                        projId: projId,
+                    },
+                    success: function (res) {
+                        $("#placeholderForTasks").html(res)
+                    }
+                })
+            }
+        })
+    }
+
+    var sub_item_progress = document.getElementsByClassName('sub-item-progress');
+    [].forEach.call(sub_item_progress, function (el) {
+        el.addEventListener('mouseover', function (e) {
+            let firstChild = el.children[0];
+            firstChild.classList.toggle('bx-tada');
+        })
+    });
+
+    [].forEach.call(sub_item_progress, function (el) {
+        el.addEventListener('mouseout', function (e) {
+            let firstChild = el.children[0];
+            firstChild.classList.toggle('bx-tada');
+        })
+    });
+</script>

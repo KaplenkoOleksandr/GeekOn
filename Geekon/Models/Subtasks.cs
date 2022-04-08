@@ -14,13 +14,15 @@ namespace Geekon.Models
         [Display(Name = "Task name")]
         public string SubtaskName { get; set; }
         public TaskStatus Status { get; set; }
-
         public string ExecutorId { get; set; } //Id of User, who will make it subtask
         [DataType(DataType.Date)]
         [Display(Name = "Deadline")]
         public DateTime Date { get; set; }
         [Display(Name = "Comment")]
         public string Comment { get; set; }
+        public int TaskId { get; set; }
+
+        public virtual Tasks Tasks { get; set; }
     }
 
     public enum TaskStatus

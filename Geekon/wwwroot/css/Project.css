@@ -1,9 +1,16 @@
-﻿.grid-cont {
-    background: url("../projBack/forest2.jpg");
-
-    background-size:cover;
-    background-repeat:no-repeat;
+﻿
+.proj-top-menu {
+    height:60px;
+    padding:12px 12px 0 12px;
+    width:inherit;
 }
+
+.top-menu-cont {
+    height: 48px;
+    width: 100%;
+    background-color: rgba(32,123,232,0.3);
+}
+
 .items {
     position: relative;
     width: 100%;
@@ -11,12 +18,34 @@
     white-space: nowrap;
     transition: all 0.2s;
     transform: scale(0.98);
-    height: 100vh;
+    height: calc(100vh - 60px);
 }
 
 .items.active {
     background: rgba(255,255,255,0.2);
     transform: scale(1);
+}
+
+.item-create {
+    display: inline-block;
+    background-color: #555555;
+    vertical-align: top;
+    margin: 20px 10px;
+    border-radius: 10px;
+    padding: 7px;
+    cursor:pointer;
+}
+
+.item-create-content {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color: white;
+}
+
+.item-create-content i {
+    font-size:24px;
+    margin-right: 7px;
 }
 
 .item {
@@ -31,11 +60,45 @@
     border-radius: 10px;
 }
 
-.sub-item-container {
+.item-name-text {
+    background-color: #555555;
+    color: white;
+    height:30px;
+    width:100%;
 
+    display: flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:0px 10px;
+}
+
+.item-options-lines {
+    height: 25px;
+    width: 25px;
+    border-radius: 5px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+}
+
+.lines {
+    font-size: 20px;
+}
+
+    .item-options-lines:hover {
+        background-color: white;
+    }
+
+    .item-options-lines:hover .lines {
+        color: #555555;
+    }
+
+.sub-item-container {
     overflow-x: hidden;
-    max-height: inherit;
-    padding-right:20px;
+    max-height: 80vh;
+    padding-right: 20px;
 }
 
 .sub-item {
@@ -44,4 +107,54 @@
     background-color: rgb(15 49 28);
     margin: 10px;
     border-radius: 10px;
+    padding:5px;
+
+    color: white;
+    font-size:16px;
+    cursor: pointer;
+
+    display:flex;
+    flex-direction:row;
+    justify-content:space-between;
+}
+
+.sub-item-create {
+    background-color: rgba(15, 49, 28, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+}
+
+    .sub-item-create i {
+        font-size: 24px;
+        margin-right: 7px;
+    }
+
+.sub-item-header {
+    display: flex;
+    flex-direction: column;
+}
+
+.sub-item-name {
+    max-width:220px;
+    overflow:hidden;
+}
+
+.sub-item-progress {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sub-item-progress i {
+    font-size:24px;
+}
+
+.sub-item-date {
+    font-size:12px;
+}
+
+.myy {
+    background-color: #92ac6d;
 }

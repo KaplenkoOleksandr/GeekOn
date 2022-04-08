@@ -8,6 +8,10 @@ namespace Geekon.Models
 {
     public class Projects
     {
+        public Projects()
+        {
+            Tasks = new List<Tasks>();
+        }
         [Key]
         public int ProjectId { get; set; }
         public string CreatorId { get; set; } // user id
@@ -19,6 +23,7 @@ namespace Geekon.Models
         [Display(Name = "Project image")]
         public string ProjImagePath { get; set; }
         public string ProjFolderLink { get; set; }
+
         public virtual ICollection<Tasks> Tasks { get; set; }
     }
 }

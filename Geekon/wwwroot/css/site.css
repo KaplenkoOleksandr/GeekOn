@@ -23,7 +23,12 @@ a.navbar-brand {
 /* Provide sufficient contrast against white background */
 a {
   color: #0366d6;
+  text-decoration:none;
 }
+
+    a:hover {
+        text-decoration: none;
+    }
 
 .btn-primary {
   color: #fff;
@@ -289,6 +294,13 @@ html {
     transform: scale(1.5);
     transition: 0.5s;
     opacity: 1;
+}
+
+.projCreateButton {
+    margin-top: 20px;
+    width: 100%;
+    border-radius: 20px;
+    border: none;
 }
 
 /*/////////////////////////////////////////////////////////*/

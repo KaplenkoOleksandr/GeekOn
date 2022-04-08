@@ -26,8 +26,12 @@ namespace Geekon.Controllers
         {
             string userId = _userManager.GetUserId(User);
 
-            var geekOnDBContext = _context.ProjectUsers.Where(u => u.UserId == userId).Include(p => p.Project);
-            return View(await geekOnDBContext.ToListAsync());
+            var _projContext = from p in _context.Projects
+                               join us in _context.ProjectUsers on p.ProjectId equals us.ProjectId
+                               where us.UserId == userId
+                               select p;
+
+            return View(await _projContext.ToListAsync());
         }
 
         // GET: ProjectUsers/Details/5

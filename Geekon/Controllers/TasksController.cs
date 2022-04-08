@@ -22,29 +22,34 @@ namespace Geekon.Controllers
         }
 
         // GET: Tasks
-        public async Task<IActionResult> Index(int? id)
+        public async Task<IActionResult> Index(int? projId)
         {
-            if (id == null)
-                return PartialView("_PartialTest");
-
-            var _taskContext = await _context.Tasks.FirstOrDefaultAsync(t => t.TaskId == id);
-
-            if (_taskContext == null)
+            if (projId == null)
                 return NotFound();
 
-            var proj = from p in _context.Projects
-                       where p.Tasks.Contains(_taskContext)
-                       select p;
+            ViewBag.projId = projId;
+
+            var _taskContext = from t in _context.Tasks
+                               where t.ProjId == projId
+                               select t;
+            foreach (var t in _taskContext)
+            {
+                var _subtaskContext = from s in _context.Subtasks
+                                      where s.TaskId == t.TaskId
+                                      select s;
+                foreach (var s in _subtaskContext.Distinct())
+                    t.Subtasks.Add(s);
+            }
 
             var access = from ac in _context.ProjectUsers
-                       where ac.UserId == _userManager.GetUserId(User) && ac.ProjectId == proj.FirstOrDefault().ProjectId 
+                       where ac.UserId == _userManager.GetUserId(User) && ac.ProjectId == projId
                        select ac;
 
-            if (access.Count() == 0)
-                return NoContent();
+            //if (access.Count() == 0)
+              //  return NoContent();
 
-            //return View(_taskContext);
-            return PartialView("_PartialTest");
+            return PartialView("_PartialTest", _taskContext);
+
         }
 
         // GET: Tasks/Details/5
@@ -75,22 +80,44 @@ namespace Geekon.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TaskId,TaskName")] Tasks tasks, int? projId)
+        public IActionResult Create(int? projId, [Bind("TaskId")] Tasks tasks)
         {
-            if (ModelState.IsValid)
+            try
             {
+                //Tasks tasks = new Tasks();
+                tasks.TaskName = "New category";
+                tasks.ProjId = (int)projId;
                 _context.Add(tasks);
+                _context.SaveChanges();
+
+                //create subtask
+                Subtasks subtask = new Subtasks();
+                subtask.SubtaskName = "New task";
+                subtask.Status = Models.TaskStatus.ToDo;
+                subtask.TaskId = tasks.TaskId;
+                subtask.Date = DateTime.Today;
+                _context.Add(subtask);
+
+
+
+                tasks.Subtasks.Add(subtask);
+
+                //_context.Update(tasks);
 
                 //add task into proj
-                var proj = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == projId);
+                var proj = _context.Projects.FirstOrDefault(p => p.ProjectId == projId);
                 proj.Tasks.Add(tasks);
-                _context.Update(proj);
+                //_context.Update(proj);
 
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                _context.SaveChanges();
+
+                return View(tasks);
             }
-            return View(tasks);
+            catch
+            {
+                return NotFound();
+            }
+     
         }
 
         // GET: Tasks/Edit/5

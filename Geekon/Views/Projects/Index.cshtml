@@ -1,15 +1,33 @@
-﻿@model IEnumerable<Geekon.Models.Projects>
+﻿@model Geekon.Models.Projects
 
 @{
     ViewData["Title"] = "Index";
 }
 
 <link href="~/css/Project.css" rel="stylesheet" />
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 
-<div class="grid-cont">
-    <div class="grid-item main">
-        <div id="placeholderForTasks" class="items"></div>
+<div id="editSubtaskPlaceholder"></div>
+
+<div style="background: url('/projBack/@Model.ProjImagePath'); background-size: cover; background-repeat: no-repeat;">
+    <div class="proj-top-menu">
+        <div class="top-menu-cont">
+            <div class="top-menu-cont-name"></div>
+        </div>
     </div>
+    <div id="placeholderForTasks" class="items"></div>
 </div>
 
 <script src="~/js/Project.js"></script>
+<script>
+    $.ajax({
+        type: "GET",
+        url: "/Tasks",
+        data: {
+            projId: @Model.ProjectId,
+        },
+        success: function (res) {
+            $("#placeholderForTasks").html(res)
+        }
+    })
+</script>

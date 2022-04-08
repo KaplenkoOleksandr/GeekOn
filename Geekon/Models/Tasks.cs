@@ -8,11 +8,18 @@ namespace Geekon.Models
 {
     public class Tasks
     {
+        public Tasks()
+        {
+            Subtasks = new List<Subtasks>();
+        }
         [Key]
         public int TaskId { get; set; }
         [Required]
         [Display(Name = "Task group name")]
         public string TaskName { get; set; }
-        public ICollection<Subtasks> Subtasks { get; set; }
+        public int ProjId { get; set; }
+
+        public virtual Projects Projects { get; set; }
+        public virtual ICollection<Subtasks> Subtasks { get; set; }
     }
 }

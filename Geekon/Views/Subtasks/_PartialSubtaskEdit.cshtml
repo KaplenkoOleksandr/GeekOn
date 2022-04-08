@@ -1,0 +1,65 @@
+﻿@model Geekon.Models.Subtasks
+
+<link href="~/css/editSubtask.css" rel="stylesheet" />
+
+<div class="modal" id="editSubtask">
+    <form id="edit-subtask-form" asp-action="Edit" class="edit-sub-model-content">
+
+        <input asp-for="SubtaskId" type="hidden" />
+        <input asp-for="TaskId" type="hidden" />
+        <input id="executorId" asp-for="ExecutorId" type="hidden" />
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="edit-sub-info">
+            <div class="edit-sub-name">
+                <input asp-for="SubtaskName" required>
+                <div class="underline"></div>
+                <span asp-validation-for="SubtaskName" class="text-danger"></span>
+            </div>
+            <div class="edit-sub-date">
+                <input asp-for="Date" class="sub-input sub-input-date" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="edit-sub-info">
+            <div class="edit-sub-info-user">
+                <div class="cube show-front" id="corner">
+                    @if (Model.ExecutorId == null || Model.ExecutorId == "")
+                    {
+                        <div class="cube__face cube__face--front" onclick="CHANGE_EXECUTOR()">front</div>
+                        <div class="cube__face cube__face--bottom" onclick="CHANGE_EXECUTOR()">bottom</div>
+                    }
+                    else
+                    {
+                        <div class="cube__face cube__face--front">front</div>
+                    }
+                </div>
+            </div>
+            <div class="edit-sub-info-status">
+                <select asp-for="Status" class="sub-input"></select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="edit-sub-description">
+            <textarea asp-for="Comment" class="sub-input sub-input-comment"></textarea>
+            <span asp-validation-for="Comment" class="text-danger"></span>
+        </div>
+        <input type="submit" value="Save" onclick="SUBMIT_MODAL_SUBTASK_EDIT(event)" class="sub-input-submit-button" />
+    </form>
+</div>
+
+<script>
+    var active = false;
+    function CHANGE_EXECUTOR() {
+        let executorId = document.getElementById('executorId');
+        active = !active;
+        if (active) {
+            executorId.value = "iamexecutor";
+        }
+        else {
+            executorId.value = "";
+        }
+        corner.classList.toggle('show-front');
+        corner.classList.toggle('show-bottom');
+    }
+</script>

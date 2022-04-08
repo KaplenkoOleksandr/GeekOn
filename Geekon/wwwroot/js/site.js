@@ -38,11 +38,3 @@ $(function () {
 })
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-
-$.ajax({
-    type: "GET",
-    url: "/Tasks",
-    success: function (res) {
-        $("#placeholderForTasks").html(res)
-    }
-})
