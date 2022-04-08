@@ -22,12 +22,12 @@ namespace Geekon.Controllers
         }
 
         // GET: Subtasks
-        public async Task<IActionResult> Index(int? id)
+        public async Task<IActionResult> Index(int? taskId)
         {
-            if (id == null)
+            if (taskId == null)
                 return NotFound();
 
-            var _subtaskContext = await _context.Subtasks.FirstOrDefaultAsync(s => s.SubtaskId == id);
+            var _subtaskContext = _context.Subtasks.Where(s => s.TaskId == taskId);
 
             if (_subtaskContext == null)
                 return NotFound();
@@ -46,16 +46,12 @@ namespace Geekon.Controllers
             if (subtasks == null)
                 return NotFound();
 
-            var task = from t in _context.Tasks
-                       where t.Subtasks.Contains(subtasks)
-                       select t;
+            var task = await _context.Tasks.FirstOrDefaultAsync(t => t.TaskId == subtasks.TaskId);
 
-            var proj = from p in _context.Projects
-                       where p.Tasks.Contains(task.FirstOrDefault())
-                       select p;
+            var proj = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == task.ProjId);
 
             var access = from ac in _context.ProjectUsers
-                         where ac.UserId == _userManager.GetUserId(User) && ac.ProjectId == proj.FirstOrDefault().ProjectId
+                         where ac.UserId == _userManager.GetUserId(User) && ac.ProjectId == proj.ProjectId
                          select ac;
 
             if (access.Count() == 0)
@@ -74,23 +70,28 @@ namespace Geekon.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SubtaskId,SubtaskName,Date,Comment")] Subtasks subtasks, int? taskId)
+        public async Task<IActionResult> Create(int? taskId, [Bind("SubtaskId")] Subtasks subtasks)
         {
-            subtasks.Status = Models.TaskStatus.ToDo;
-            if (ModelState.IsValid)
+            try
             {
+                subtasks.Status = Models.TaskStatus.ToDo;
+                subtasks.SubtaskName = "New task";
+                subtasks.TaskId = (int)taskId;
+                subtasks.Date = DateTime.Today;
                 _context.Add(subtasks);
 
                 //add subtask into task
                 var task = await _context.Tasks.FirstOrDefaultAsync(t => t.TaskId == taskId);
                 task.Subtasks.Add(subtasks);
-                _context.Update(task);
+                //_context.Update(task);
 
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                return View(subtasks);
             }
-            return View(subtasks);
+            catch {
+                return NotFound();
+            }
         }
 
         // GET: Subtasks/Edit/5
@@ -106,42 +107,25 @@ namespace Geekon.Controllers
             {
                 return NotFound();
             }
-            return View(subtasks);
+            return PartialView("_PartialSubtaskEdit", subtasks);
         }
 
         // POST: Subtasks/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SubtaskId,SubtaskName,Status,UserId,Date,Comment")] Subtasks subtasks)
+        public async Task<IActionResult> Edit([Bind("SubtaskId,SubtaskName,TaskId,Status,UserId,Date,Comment")] Subtasks subtasks)
         {
-            if (id != subtasks.SubtaskId)
+            try
+            {
+                _context.Update(subtasks);
+                await _context.SaveChangesAsync();
+                return PartialView("_PartialSubtaskEdit", subtasks);
+            }
+            catch
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(subtasks);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!SubtasksExists(subtasks.SubtaskId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(subtasks);
         }
 
         // GET: Subtasks/Delete/5

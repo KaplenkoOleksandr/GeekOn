@@ -26,11 +26,17 @@ namespace Geekon.Controllers
             _env = env;
         }
 
+        public IActionResult SomeAct(int? id)
+        {
+            return PartialView("_PartialTest");
+        }
+
         // GET: Projects
         public async Task<IActionResult> Index(int? id)
         {
             if (id == null)
-                return View();
+                //return View();
+                return NotFound();
 
             var _projContext = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == id);
 

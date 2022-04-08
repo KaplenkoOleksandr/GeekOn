@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Geekon.Models.ProjectUsers>
+﻿@model IEnumerable<Geekon.Models.Projects>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,85 +9,30 @@
 <div style="padding: 50px;">
     <h1>Projects</h1>
     <div class="projContainer">
-        <div id="projAddButton"class="proj projCreate" style="background-color:lightgray; display:flex; justify-content:center; align-items:center;"
-                data-toggle="ajax-model" data-target="#addProject" data-url="@Url.Action("Create", "Projects")">
+
+        @*CREATE SQUARE*@
+        <div id="projAddButton" class="proj projCreate" style="background-color:lightgray; display:flex; justify-content:center; align-items:center;"
+             data-toggle="ajax-model" data-target="#addProject" data-url="@Url.Action("Create", "Projects")">
             <i class='bx bxs-plus-circle' style="font-size:97px; color:white;"></i>
         </div>
-
-        <a class="proj"  href="@Url.Action("Index", "Projects")" style="background: url('https://images.pexels.com/photos/1083822/pexels-photo-1083822.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'); background-size: contain; ">
-            <div class="projSlider">
-                <div class="projName">Name Project</div>
-                <div class="projLine"></div>
-                <div class="projCreationDate">12.08.2020</div>
-                <div class="projOwnerInfo">
-                    <div class="projOwnerPhoto"></div>
-                    <div>
-                        <div class="projOwnerName">sdfghjk</div>
-                        <div class="projOwnerEmail">dartyuio@sdfghj</div>
+        @foreach (var p in Model)
+        {
+            <a class="proj" href="@Url.Action("Index", "Projects", new { id = p.ProjectId })"
+               style="background: url('/projBack/@p.ProjImagePath'); background-size: contain;">
+                <div class="projSlider">
+                    <div class="projName">@p.ProjName</div>
+                    <div class="projLine"></div>
+                    <div class="projCreationDate">@p.DateCreate</div>
+                    <div class="projOwnerInfo">
+                        <div class="projOwnerPhoto"></div>
+                        <div>
+                            <div class="projOwnerName">dfgh</div>
+                            <div class="projOwnerEmail">dartyuio@sdfghj</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <i class='bx bx-folder projFolder' title="Project Folder"></i>
-        </a>
-        <div class="proj" style="background: url('https://wallpaperaccess.com/full/1516567.jpg'); background-size: contain;">
-            <div class="projSlider">
-                <div class="projName">Name Project</div>
-                <div class="projLine"></div>
-                <div class="projCreationDate">12.08.2020</div>
-                <div class="projOwnerInfo">
-                    <div class="projOwnerPhoto"></div>
-                    <div>
-                        <div class="projOwnerName">sdfghjk</div>
-                        <div class="projOwnerEmail">dartyuio@sdfghj</div>
-                    </div>
-                </div>
-            </div>
-            <i class='bx bx-folder projFolder' title="Project Folder"></i>
-        </div>
-        <div class="proj" style="background: url('https://p4.wallpaperbetter.com/wallpaper/302/505/93/dark-reflection-forest-trees-wallpaper-preview.jpg'); background-size: contain; ">
-            <div class="projSlider">
-                <div class="projName">Name Project</div>
-                <div class="projLine"></div>
-                <div class="projCreationDate">12.08.2020</div>
-                <div class="projOwnerInfo">
-                    <div class="projOwnerPhoto"></div>
-                    <div>
-                        <div class="projOwnerName">sdfghjk</div>
-                        <div class="projOwnerEmail">dartyuio@sdfghj</div>
-                    </div>
-                </div>
-            </div>
-            <i class='bx bx-folder projFolder' title="Project Folder"></i>
-        </div>
-        <div class="proj" style="background: url('https://i.pinimg.com/736x/11/96/be/1196be2e2beae3e0376637776225272f.jpg'); background-size: contain; ">
-            <div class="projSlider">
-                <div class="projName">Name Project</div>
-                <div class="projLine"></div>
-                <div class="projCreationDate">12.08.2020</div>
-                <div class="projOwnerInfo">
-                    <div class="projOwnerPhoto"></div>
-                    <div>
-                        <div class="projOwnerName">sdfghjk</div>
-                        <div class="projOwnerEmail">dartyuio@sdfghj</div>
-                    </div>
-                </div>
-            </div>
-            <i class='bx bx-folder projFolder' title="Project Folder"></i>
-        </div>
-        <div class="proj" style="background: url('https://i.pinimg.com/originals/22/b8/ff/22b8ffb60892118a24eed6024b953120.jpg'); background-size: contain; ">
-            <div class="projSlider">
-                <div class="projName">Name Project</div>
-                <div class="projLine"></div>
-                <div class="projCreationDate">12.08.2020</div>
-                <div class="projOwnerInfo">
-                    <div class="projOwnerPhoto"></div>
-                    <div>
-                        <div class="projOwnerName">sdfghjk</div>
-                        <div class="projOwnerEmail">dartyuio@sdfghj</div>
-                    </div>
-                </div>
-            </div>
-            <i class='bx bx-folder projFolder' title="Project Folder"></i>
-        </div>
+                <i class='bx bx-folder projFolder' title="Project Folder"></i>
+            </a>
+        }
     </div>
 </div>
