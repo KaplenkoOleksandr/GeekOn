@@ -1,5 +1,8 @@
 ﻿@model Geekon.Models.Subtasks
 
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> userManager
+
 <link href="~/css/editSubtask.css" rel="stylesheet" />
 
 <div class="modal" id="editSubtask">
@@ -8,36 +11,61 @@
         <input asp-for="SubtaskId" type="hidden" />
         <input asp-for="TaskId" type="hidden" />
         <input id="executorId" asp-for="ExecutorId" type="hidden" />
-
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="edit-sub-info">
-            <div class="edit-sub-name">
-                <input asp-for="SubtaskName" required>
-                <div class="underline"></div>
-                <span asp-validation-for="SubtaskName" class="text-danger"></span>
-            </div>
-            <div class="edit-sub-date">
-                <input asp-for="Date" class="sub-input sub-input-date" />
-                <span asp-validation-for="Date" class="text-danger"></span>
-            </div>
+
+        <div class="edit-sub-name">
+            <input asp-for="SubtaskName" required>
+            <div class="underline"></div>
+            <span asp-validation-for="SubtaskName" class="text-danger"></span>
         </div>
+
         <div class="edit-sub-info">
             <div class="edit-sub-info-user">
-                <div class="cube show-front" id="corner">
-                    @if (Model.ExecutorId == null || Model.ExecutorId == "")
-                    {
+                @if (Model.ExecutorId == null || Model.ExecutorId == "")
+                {
+                    <div class="cube show-front" id="corner">
                         <div class="cube__face cube__face--front" onclick="CHANGE_EXECUTOR()">front</div>
                         <div class="cube__face cube__face--bottom" onclick="CHANGE_EXECUTOR()">bottom</div>
-                    }
-                    else
-                    {
-                        <div class="cube__face cube__face--front">front</div>
-                    }
-                </div>
+                    </div>
+                }
+                else if (Model.ExecutorId == userManager.GetUserId(User))
+                {
+                    <div class="cube show-bottom" id="corner">
+                        <div class="cube__face cube__face--front" onclick="CHANGE_EXECUTOR()">front</div>
+                        <div class="cube__face cube__face--bottom" onclick="CHANGE_EXECUTOR()">bottom</div>
+                    </div>
+                }
+                else
+                {
+                    <div class="cube">
+                        <div class="cube__face cube__face--front">sdfsddg</div>
+                    </div>
+                }
             </div>
             <div class="edit-sub-info-status">
-                <select asp-for="Status" class="sub-input"></select>
-                <span asp-validation-for="Status" class="text-danger"></span>
+                <div class="menu">
+                    <div class="toggle">Q</div>
+                    <li style="--i:0">
+                        <a href="#">A</a>
+                    </li>
+                    <li style="--i:1">
+                        <a href="#">S</a>
+                    </li>
+                    <li style="--i:2">
+                        <a href="#">D</a>
+                    </li>
+                    <li style="--i:3">
+                        <a href="#">F</a>
+                    </li>
+                </div>
+                @*<select asp-for="Status" class="sub-input"></select>
+                <span asp-validation-for="Status" class="text-danger"></span>*@
+            </div>
+        </div>
+        <div style="width:500px; display:flex;">
+            <div class="edit-sub-date" style="align-self: flex-start;">
+                <input asp-for="Date" class="sub-input sub-input-date" />
+                <span asp-validation-for="Date" class="text-danger"></span>
             </div>
         </div>
         <div class="edit-sub-description">
@@ -49,12 +77,22 @@
 </div>
 
 <script>
-    var active = false;
+
+    let toggle = document.querySelector('.toggle');
+    let menu = document.querySelector('.menu');
+    toggle.onclick = function () {
+        menu.classList.toggle('active');
+    }
+
+    var active = true;
+    if (document.getElementById('corner') != null && document.getElementById('corner').classList.contains('show-front')) {
+        var active = false;
+    }
     function CHANGE_EXECUTOR() {
         let executorId = document.getElementById('executorId');
         active = !active;
         if (active) {
-            executorId.value = "iamexecutor";
+            executorId.value = "275bb2e4-0a4a-4597-a317-148ce0c902ec";
         }
         else {
             executorId.value = "";

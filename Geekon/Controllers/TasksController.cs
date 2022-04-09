@@ -142,14 +142,18 @@ namespace Geekon.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([Bind("TaskId,TaskName,Archive")] Tasks tasks)
+        public async Task<IActionResult> Edit(int taskId, string taskName)
         {
             try
             {
+                var tasks = await _context.Tasks
+                    .Where(t => t.TaskId == taskId).FirstOrDefaultAsync();
+
+                tasks.TaskName = taskName;
+
                 _context.Update(tasks);
                 await _context.SaveChangesAsync();
-                return PartialView("_PartialTaskEdit", tasks);
+                return View(tasks);
             }
             catch
             {
