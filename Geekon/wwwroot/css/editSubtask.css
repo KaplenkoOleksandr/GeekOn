@@ -4,12 +4,12 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    align-items: center;
     height: 600px;
     width: 700px;
     border-radius: 15px;
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: space-around;
     box-shadow: 0 0 20px rgb(221 221 221);
 }
@@ -20,6 +20,12 @@
     justify-content: space-between;
     align-items: center;
     width: 500px;
+}
+
+.edit-sub-info-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 /*////////////////////////////////////////////////////*/
 .edit-sub-info-user {
@@ -122,7 +128,7 @@
 /*/////////////////////////////////////////////*/
 .edit-sub-name {
     height: 40px;
-    width: 100%;
+    width: 500px;
     position: relative;
 }
 
@@ -156,4 +162,66 @@
     .edit-sub-name input:focus ~ .underline:before {
         transform: scaleX(1);
     }
+/*/////////////////////////////////////////////////////////////////////*/
 
+.menu {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .menu li {
+        position: absolute;
+        left: 0;
+        font-size: 25px;
+        list-style: none;
+        transform-origin: 100px;
+        transition: 0.5s;
+        transition-delay: calc(0.1s * var(--i));
+        transform: rotate(0deg) translateX(100px);
+    }
+
+    .menu.active li {
+        transform: rotate(calc(90deg / -3 * var(--i)));
+    }
+
+    .menu li a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        background: #fff;
+        border-radius: 50%;
+        transform: rotate(calc(90deg / 3 * var(--i)));
+        transition: 0.5s;
+    }
+
+        .menu li a:hover {
+            color: cyan;
+        }
+
+
+.toggle {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100000;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 4px #fff;
+    font-size: 2em;
+    transition: 1.25s;
+}
+
+
+.menu.active .toggle {
+    transform: rotate(315deg);
+}

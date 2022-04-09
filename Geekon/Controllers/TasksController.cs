@@ -140,35 +140,23 @@ namespace Geekon.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TaskId,TaskName")] Tasks tasks)
+        public async Task<IActionResult> Edit(int taskId, string taskName)
         {
-            if (id != tasks.TaskId)
+            try
+            {
+                var tasks = await _context.Tasks
+                    .Where(t => t.TaskId == taskId).FirstOrDefaultAsync();
+
+                tasks.TaskName = taskName;
+
+                _context.Update(tasks);
+                await _context.SaveChangesAsync();
+                return View(tasks);
+            }
+            catch
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(tasks);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TasksExists(tasks.TaskId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(tasks);
         }
 
         // GET: Tasks/Delete/5

@@ -4,7 +4,7 @@
 {
     <div class="item" onmousedown="stopProp(event)">
         <div class="item-name-text">
-            @task.TaskName
+            <input id="taskName{@task.TaskId}" class="taskName" type="text" value="@task.TaskName" onfocusout="EDIT_TASK_SUBMIT(@task.TaskId)"/>
             <div class="item-options-lines">
                 <i class='bx bx-menu lines' id="btn"></i>
             </div>
@@ -54,9 +54,32 @@
         event.stopPropagation();
     }
 
+    function EDIT_TASK_SUBMIT(taskId) {
+        var taskName = document.getElementById("taskName" + taskId).value;
+        $.ajax({
+            type: "POST",
+            url: "/Tasks/Edit",
+            data: {
+                taskId: taskId,
+                taskName: taskName,
+            },
+            success: function (res) {
+                $.ajax({
+                    type: "GET",
+                    url: "/Tasks",
+                    data: {
+                        projId: @ViewBag.projId,
+                    },
+                    success: function (res) {
+                        $("#placeholderForTasks").html(res);
+                    }
+                })
+            }
+        })
+    }
+
     function SUBMIT_MODAL_SUBTASK_EDIT (event) {
         event.preventDefault();
-        console.log("success");
         var data = $("#edit-subtask-form").serialize();
         $.ajax({
             type: "POST",
