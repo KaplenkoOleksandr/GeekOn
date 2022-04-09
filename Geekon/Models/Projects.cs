@@ -23,6 +23,8 @@ namespace Geekon.Models
         [Display(Name = "Project image")]
         public string ProjImagePath { get; set; }
         public string ProjFolderLink { get; set; }
+        public bool Archive { get; set; }
+        public int ArchiveTaskId { get; set; }
 
         public virtual ICollection<Tasks> Tasks { get; set; }
     }

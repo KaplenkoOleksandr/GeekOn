@@ -45,8 +45,8 @@ namespace Geekon.Controllers
                        where ac.UserId == _userManager.GetUserId(User) && ac.ProjectId == projId
                        select ac;
 
-            //if (access.Count() == 0)
-              //  return NoContent();
+            if (access.Count() == 0)
+               return NoContent();
 
             return PartialView("_PartialTest", _taskContext);
 
@@ -87,6 +87,7 @@ namespace Geekon.Controllers
                 //Tasks tasks = new Tasks();
                 tasks.TaskName = "New category";
                 tasks.ProjId = (int)projId;
+                tasks.Archive = false;
                 _context.Add(tasks);
                 _context.SaveChanges();
 
@@ -96,6 +97,7 @@ namespace Geekon.Controllers
                 subtask.Status = Models.TaskStatus.ToDo;
                 subtask.TaskId = tasks.TaskId;
                 subtask.Date = DateTime.Today;
+                subtask.Archive = false;
                 _context.Add(subtask);
 
 
@@ -141,34 +143,18 @@ namespace Geekon.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TaskId,TaskName")] Tasks tasks)
+        public async Task<IActionResult> Edit([Bind("TaskId,TaskName,Archive")] Tasks tasks)
         {
-            if (id != tasks.TaskId)
+            try
+            {
+                _context.Update(tasks);
+                await _context.SaveChangesAsync();
+                return PartialView("_PartialTaskEdit", tasks);
+            }
+            catch
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(tasks);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TasksExists(tasks.TaskId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(tasks);
         }
 
         // GET: Tasks/Delete/5

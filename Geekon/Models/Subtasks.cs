@@ -21,6 +21,7 @@ namespace Geekon.Models
         [Display(Name = "Comment")]
         public string Comment { get; set; }
         public int TaskId { get; set; }
+        public bool Archive { get; set; }
 
         public virtual Tasks Tasks { get; set; }
     }

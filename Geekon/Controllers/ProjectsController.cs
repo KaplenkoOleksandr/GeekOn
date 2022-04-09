@@ -99,22 +99,61 @@ namespace Geekon.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProjectId,ProjName,ProjImagePath")] Projects projects)
         {
-            projects.CreatorId = _userManager.GetUserId(User);
-            projects.DateCreate = DateTimeOffset.Now;
-            if (ModelState.IsValid)
+            try
             {
+                projects.CreatorId = _userManager.GetUserId(User);
+                projects.DateCreate = DateTimeOffset.Now;
+                projects.Archive = false;
+                _context.Add(projects);
+                _context.SaveChanges();
+
                 // add Project-User row
                 ProjectUsers projectUser = new ProjectUsers();
                 projectUser.Project = projects;
                 projectUser.ProjectId = projects.ProjectId;
                 projectUser.UserId = projects.CreatorId;
                 _context.ProjectUsers.Add(projectUser);
+                _context.SaveChanges();
 
-                _context.Add(projects);
+                // add first Task into new project
+                Tasks tasks = new Tasks();
+                tasks.TaskName = "New category";
+                tasks.ProjId = projects.ProjectId;
+                tasks.Archive = false;
+                _context.Add(tasks);
+                _context.SaveChanges();
+                projects.Tasks.Add(tasks);
+
+                // add first Subask into new project
+                Subtasks subtask = new Subtasks();
+                subtask.SubtaskName = "New task";
+                subtask.Status = Models.TaskStatus.ToDo;
+                subtask.TaskId = tasks.TaskId;
+                subtask.Date = DateTime.Today;
+                subtask.Archive = false;
+                _context.Add(subtask);
+                _context.SaveChanges();
+                tasks.Subtasks.Add(subtask);
+
+                // add archive Task into new project
+                Tasks archTasks = new Tasks();
+                archTasks.TaskName = "Archive";
+                archTasks.ProjId = projects.ProjectId;
+                archTasks.Archive = true;
+                _context.Add(archTasks);
+                _context.SaveChanges();
+                projects.Tasks.Add(archTasks);
+                projects.ArchiveTaskId = archTasks.TaskId;
+
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", new { id = projects.ProjectId });
             }
+            catch
+            {
+                return NotFound();
+            }
+
             return View(projects);
         }
 
@@ -139,34 +178,18 @@ namespace Geekon.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProjectId,ProjName,ProjImagePath")] Projects projects)
+        public async Task<IActionResult> Edit([Bind("ProjectId,ProjName,ProjImagePath,Archive")] Projects projects)
         {
-            if (id != projects.ProjectId)
+            try
+            {
+                _context.Update(projects);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", new { id = projects.ProjectId }); //if Archive stay true => redirect to all projects
+            }
+            catch
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(projects);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProjectsExists(projects.ProjectId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(projects);
         }
 
         // GET: Projects/Delete/5

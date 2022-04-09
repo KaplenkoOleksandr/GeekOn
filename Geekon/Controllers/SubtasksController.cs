@@ -114,10 +114,18 @@ namespace Geekon.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<IActionResult> Edit([Bind("SubtaskId,SubtaskName,TaskId,Status,UserId,Date,Comment")] Subtasks subtasks)
+        public async Task<IActionResult> Edit([Bind("SubtaskId,SubtaskName,TaskId,Status,ExecutorId,Date,Comment,Archive")] Subtasks subtasks)
         {
             try
             {
+                if (subtasks.Archive)
+                {
+                    var task = await _context.Tasks.FirstOrDefaultAsync(t => t.TaskId == subtasks.TaskId);
+                    var proj = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == task.ProjId);
+
+                    subtasks.TaskId = proj.ArchiveTaskId;
+                }
+
                 _context.Update(subtasks);
                 await _context.SaveChangesAsync();
                 return PartialView("_PartialSubtaskEdit", subtasks);
