@@ -144,6 +144,7 @@ namespace Geekon.Controllers
                 _context.SaveChanges();
                 projects.Tasks.Add(archTasks);
                 projects.ArchiveTaskId = archTasks.TaskId;
+                subtask.ArchiveTaskId = archTasks.TaskId;
 
 
                 await _context.SaveChangesAsync();

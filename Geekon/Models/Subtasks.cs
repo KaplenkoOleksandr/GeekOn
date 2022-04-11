@@ -22,16 +22,17 @@ namespace Geekon.Models
         public string Comment { get; set; }
         public int TaskId { get; set; }
         public bool Archive { get; set; }
+        public int ArchiveTaskId { get; set; }
 
         public virtual Tasks Tasks { get; set; }
     }
 
     public enum TaskStatus
-    { 
+    {
         ToDo,
         InProgress,
         Finished,
-        Blocked
+        Bugs
     }
 
 }

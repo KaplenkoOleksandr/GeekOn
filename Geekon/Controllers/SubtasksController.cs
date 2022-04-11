@@ -78,18 +78,22 @@ namespace Geekon.Controllers
                 subtasks.SubtaskName = "New task";
                 subtasks.TaskId = (int)taskId;
                 subtasks.Date = DateTime.Today;
+                subtasks.Archive = false;
                 _context.Add(subtasks);
 
                 //add subtask into task
                 var task = await _context.Tasks.FirstOrDefaultAsync(t => t.TaskId == taskId);
                 task.Subtasks.Add(subtasks);
                 //_context.Update(task);
+                var proj = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == task.ProjId);
+                subtasks.ArchiveTaskId = proj.ArchiveTaskId;
 
                 await _context.SaveChangesAsync();
 
                 return View(subtasks);
             }
-            catch {
+            catch
+            {
                 return NotFound();
             }
         }
@@ -118,12 +122,37 @@ namespace Geekon.Controllers
         {
             try
             {
-                if (subtasks.Archive)
+                var oldSubtask = await _context.Subtasks.FirstOrDefaultAsync(o => o.SubtaskId == subtasks.SubtaskId);
+                if (oldSubtask.Archive != subtasks.Archive)
                 {
                     var task = await _context.Tasks.FirstOrDefaultAsync(t => t.TaskId == subtasks.TaskId);
                     var proj = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == task.ProjId);
 
-                    subtasks.TaskId = proj.ArchiveTaskId;
+                    subtasks.ArchiveTaskId = subtasks.TaskId;
+                    subtasks.TaskId = oldSubtask.ArchiveTaskId;
+
+                    if (!subtasks.Archive)
+                    {
+                        var archTask = await _context.Tasks.FirstOrDefaultAsync(a => a.TaskId == oldSubtask.ArchiveTaskId);
+                        if (archTask == null)
+                        {
+                            var firstTask = await _context.Tasks.FirstOrDefaultAsync(f => f.ProjId == proj.ProjectId && f.TaskId != oldSubtask.TaskId);
+                            if (firstTask != null)
+                                subtasks.TaskId = firstTask.TaskId;
+                            else
+                            {
+                                Tasks newTask = new Tasks();
+                                newTask.TaskName = "New category";
+                                newTask.ProjId = proj.ProjectId;
+                                newTask.Archive = false;
+                                newTask.Subtasks.Add(subtasks);
+                                _context.Add(newTask);
+                                _context.SaveChanges();
+
+                                subtasks.TaskId = newTask.TaskId;
+                            }
+                        }
+                    }
                 }
 
                 _context.Update(subtasks);

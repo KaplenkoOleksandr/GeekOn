@@ -42,11 +42,11 @@ namespace Geekon.Controllers
             }
 
             var access = from ac in _context.ProjectUsers
-                       where ac.UserId == _userManager.GetUserId(User) && ac.ProjectId == projId
-                       select ac;
+                         where ac.UserId == _userManager.GetUserId(User) && ac.ProjectId == projId
+                         select ac;
 
             if (access.Count() == 0)
-               return NoContent();
+                return NoContent();
 
             return PartialView("_PartialTest", _taskContext);
 
@@ -109,6 +109,7 @@ namespace Geekon.Controllers
                 //add task into proj
                 var proj = _context.Projects.FirstOrDefault(p => p.ProjectId == projId);
                 proj.Tasks.Add(tasks);
+                subtask.ArchiveTaskId = proj.ArchiveTaskId;
                 //_context.Update(proj);
 
                 _context.SaveChanges();
@@ -119,7 +120,7 @@ namespace Geekon.Controllers
             {
                 return NotFound();
             }
-     
+
         }
 
         // GET: Tasks/Edit/5
@@ -142,7 +143,7 @@ namespace Geekon.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<IActionResult> Edit(int taskId, string taskName)
+        public async Task<IActionResult> Edit(int taskId, string taskName, bool archive = false)
         {
             try
             {
