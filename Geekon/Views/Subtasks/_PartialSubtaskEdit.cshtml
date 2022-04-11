@@ -11,28 +11,51 @@
         <input asp-for="SubtaskId" type="hidden" />
         <input asp-for="TaskId" type="hidden" />
         <input id="executorId" asp-for="ExecutorId" type="hidden" />
+        <input id="archiveBool" asp-for="Archive" type="hidden" />
+        <input id="statusString" asp-for="Status" type="hidden" />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        <div class="edit-sub-name">
-            <input asp-for="SubtaskName" required>
-            <div class="underline"></div>
-            <span asp-validation-for="SubtaskName" class="text-danger"></span>
+        <div class="edit-sub-info">
+            <div class="edit-sub-name">
+                <input asp-for="SubtaskName" required>
+                <div class="underline"></div>
+                <span asp-validation-for="SubtaskName" class="text-danger"></span>
+            </div>
+            <div style="display:flex; flex-direction:row;">
+                <div class="edit-sub-info-archive">
+                    @if (Model.Archive == false)
+                    {
+                        <div class="cube show-front" id="corner-archive">
+                            <div class="archive__face archive__face--front" onclick="CHANGE_ARCHIVE()">false</div>
+                            <div class="archive__face archive__face--bottom" onclick="">true</div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="cube show-bottom" id="corner-archive">
+                            <div class="archive__face archive__face--front" onclick="">false</div>
+                            <div class="archive__face archive__face--bottom" onclick="">true</div>
+                        </div>
+                    }
+                </div>
+                <div class="sub-delete" onclick="@Model.SubtaskId">P</div>
+            </div>
         </div>
 
         <div class="edit-sub-info">
             <div class="edit-sub-info-user">
                 @if (Model.ExecutorId == null || Model.ExecutorId == "")
                 {
-                    <div class="cube show-front" id="corner">
-                        <div class="cube__face cube__face--front" onclick="CHANGE_EXECUTOR()">front</div>
-                        <div class="cube__face cube__face--bottom" onclick="CHANGE_EXECUTOR()">bottom</div>
+                    <div class="cube show-front" id="corner-user">
+                        <div class="cube__face cube__face--front" onclick="">front</div>
+                        <div class="cube__face cube__face--bottom" onclick="">bottom</div>
                     </div>
                 }
                 else if (Model.ExecutorId == userManager.GetUserId(User))
                 {
-                    <div class="cube show-bottom" id="corner">
-                        <div class="cube__face cube__face--front" onclick="CHANGE_EXECUTOR()">front</div>
-                        <div class="cube__face cube__face--bottom" onclick="CHANGE_EXECUTOR()">bottom</div>
+                    <div class="cube show-bottom" id="corner-user">
+                        <div class="cube__face cube__face--front" onclick="">front</div>
+                        <div class="cube__face cube__face--bottom" onclick="">bottom</div>
                     </div>
                 }
                 else
@@ -44,22 +67,31 @@
             </div>
             <div class="edit-sub-info-status">
                 <div class="menu">
-                    <div class="toggle">Q</div>
+                    <div class="toggle">
+                        <div class="toggle-text" id="toggle-text"></div>
+                        <div class="toggle-icon" id="toggle-icon"></div>
+                    </div>
                     <li style="--i:0">
-                        <a href="#">A</a>
+                        <a href="#">
+                            <i class='bx bx-square'></i>
+                        </a>
                     </li>
                     <li style="--i:1">
-                        <a href="#">S</a>
+                        <a href="#">
+                            <i class='bx bxs-hourglass'></i>
+                        </a>
                     </li>
                     <li style="--i:2">
-                        <a href="#">D</a>
+                        <a href="#">
+                            <i class='bx bx-check-square'></i></i>
+                        </a>
                     </li>
                     <li style="--i:3">
-                        <a href="#">F</a>
+                        <a href="#">
+                            <i class='bx bx-bug'></i>
+                        </a>
                     </li>
                 </div>
-                @*<select asp-for="Status" class="sub-input"></select>
-                <span asp-validation-for="Status" class="text-danger"></span>*@
             </div>
         </div>
         <div style="width:500px; display:flex;">
@@ -72,32 +104,61 @@
             <textarea asp-for="Comment" class="sub-input sub-input-comment"></textarea>
             <span asp-validation-for="Comment" class="text-danger"></span>
         </div>
-        <input type="submit" value="Save" onclick="SUBMIT_MODAL_SUBTASK_EDIT(event)" class="sub-input-submit-button" />
+        <input type="submit" value="Save" onclick="" class="sub-input-submit-button" />
     </form>
 </div>
 
 <script>
+    var toggleText = document.getElementById('toggle-text');
+    var toggleIcon = document.getElementById('toggle-icon');
+    var statusString = document.getElementById('statusString'); //ToDo, InProgress, Finished, Blocked
 
-    let toggle = document.querySelector('.toggle');
-    let menu = document.querySelector('.menu');
+    console.log(statusInt.value);
+
+
+    var toggle = document.querySelector('.toggle');
+    var menu = document.querySelector('.menu');
     toggle.onclick = function () {
-        menu.classList.toggle('active');
+        document.getElementById('toggle-text').classList.toggle('sub-status-text');
+        setTimeout(function () {
+            menu.classList.toggle('active');
+            document.getElementById('toggle-text').classList.toggle('toggle-text');
+            document.getElementById('toggle-text').classList.toggle('class_display_none')
+        }, 200);
+    }
+
+
+    var archiveBool = document.getElementById('archiveBool');
+
+    var isArchive = true;
+    if (archiveBool.value == "false" || archiveBool.value == "False") {
+        isArchive = false;
+    }
+
+    function CHANGE_ARCHIVE() {
+        isArchive = !isArchive;
+
+        archiveBool.value = isArchive;
+
+        document.getElementById('corner-archive').classList.toggle('show-front');
+        document.getElementById('corner-archive').classList.toggle('show-bottom');
     }
 
     var active = true;
-    if (document.getElementById('corner') != null && document.getElementById('corner').classList.contains('show-front')) {
+    if (document.getElementById('corner-user') != null && document.getElementById('corner-user').classList.contains('show-front')) {
         var active = false;
     }
+
     function CHANGE_EXECUTOR() {
         let executorId = document.getElementById('executorId');
         active = !active;
         if (active) {
-            executorId.value = "275bb2e4-0a4a-4597-a317-148ce0c902ec";
+            executorId.value = "iamexecutor";
         }
         else {
             executorId.value = "";
         }
-        corner.classList.toggle('show-front');
-        corner.classList.toggle('show-bottom');
+        document.getElementById('corner-user').classList.toggle('show-front');
+        document.getElementById('corner-user').classList.toggle('show-bottom');
     }
 </script>

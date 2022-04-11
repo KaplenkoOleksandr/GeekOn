@@ -4,7 +4,7 @@
 {
     <div class="item" onmousedown="stopProp(event)">
         <div class="item-name-text">
-            <input id="taskName{@task.TaskId}" class="taskName" type="text" value="@task.TaskName" onfocusout="EDIT_TASK_SUBMIT(@task.TaskId)"/>
+            <input id="taskName{@task.TaskId}" class="taskName" type="text" value="@task.TaskName" onfocusout="EDIT_TASK_SUBMIT(@task.TaskId)" />
             <div class="item-options-lines">
                 <i class='bx bx-menu lines' id="btn"></i>
             </div>
@@ -96,6 +96,29 @@
                         projId: @ViewBag.projId,
                     },
                     success: function (res) {
+                        $("#placeholderForTasks").html(res);
+                    }
+                })
+            }
+        })
+    }
+
+    function DELETE_SUBTASK(id) {
+        $.ajax({
+            type: "POST",
+            url: "/Subtasks/DELETE",
+            data: {
+                id: id,
+            },
+            success: function (res) {
+                $.ajax({
+                    type: "GET",
+                    url: "/Tasks",
+                    data: {
+                        projId: @ViewBag.projId,
+                    },
+                    success: function (res) {
+                        $("#editSubtaskPlaceholder").find('.modal').modal('hide');
                         $("#placeholderForTasks").html(res);
                     }
                 })
