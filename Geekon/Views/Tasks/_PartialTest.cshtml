@@ -103,6 +103,29 @@
         })
     }
 
+    function DELETE_SUBTASK(id) {
+        $.ajax({
+            type: "POST",
+            url: "/Subtasks/DELETE",
+            data: {
+                id: id,
+            },
+            success: function (res) {
+                $.ajax({
+                    type: "GET",
+                    url: "/Tasks",
+                    data: {
+                        projId: @ViewBag.projId,
+                    },
+                    success: function (res) {
+                        $("#editSubtaskPlaceholder").find('.modal').modal('hide');
+                        $("#placeholderForTasks").html(res);
+                    }
+                })
+            }
+        })
+    }
+
     function OPEN_MODAL_SUBTASK_EDIT(id) {
         $('#editSubtaskPlaceholder').appendTo("body");
         $.ajax({
