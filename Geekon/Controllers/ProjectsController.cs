@@ -72,16 +72,21 @@ namespace Geekon.Controllers
             List<Tasks> archiveTasks = new List<Tasks>();
             archiveTasks.Add(archTask);
 
-            var tasks = from t in _context.Tasks
-                        where t.Archive
-                        select t;
+            var _subtaskContext = from s in _context.Subtasks
+                                  where s.TaskId == archTask.TaskId && s.Archive
+                                  select s;
+
+            foreach (var s in _subtaskContext.Distinct())
+                archTask.Subtasks.Add(s);
+
+            var tasks = _context.Tasks.Where(t => t.Archive && t.TaskId != proj.ArchiveTaskId && t.ProjId == projId).Distinct();
 
             foreach(var t in tasks)
             {
                 archiveTasks.Add(t);
             }
 
-            return View(archiveTasks);
+            return PartialView("_partialDetails", archiveTasks);
         }
 
         // GET: Projects/Create

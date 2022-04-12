@@ -270,24 +270,36 @@
 
 #archive-in-proj li {
     margin: 0;
-    padding: 1rem 0;
+    padding: 0.5rem 0;
     border-bottom: 1px solid #ccc;
     display: flex;
     align-items: center;
-    width: 330px;
+    width: 310px;
 }
 
-.all-icon-user-in-proj {
+.all-icon-archive-in-proj {
     height: 40px;
     width: 40px;
     border-radius: 100%;
-    margin-right: 10px;
+    background-color: rgb(51, 92, 67);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 20px;
+}
+
+.all-icon-archive-in-proj :hover{
+    height: 40px;
+    width: 40px;
+    border-radius: 100%;
     background-color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     color: rgb(51, 92, 67);
     font-size: 20px;
+    cursor: pointer;
 }
 
 .text-user-in-proj {
@@ -303,5 +315,16 @@
     padding-bottom: 0;
     border-bottom: none;
 }
+
+.list-icon-archive-in-proj {
+    height: 40px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 25px;
+}
+
 
 /*///////////////////////////////////////////////////////*/

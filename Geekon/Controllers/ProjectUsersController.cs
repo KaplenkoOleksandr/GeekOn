@@ -52,7 +52,7 @@ namespace Geekon.Controllers
                 usersEmail.Add(_userManager.FindByIdAsync(user.UserId).Result.Email);
             }
 
-            return View(usersEmail);
+            return PartialView("_partialDetails", usersEmail);
         }
 
         // GET: ProjectUsers/Create
