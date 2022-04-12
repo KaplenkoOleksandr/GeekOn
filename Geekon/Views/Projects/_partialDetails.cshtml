@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Geekon.Models.Tasks>
 
 
-@foreach (var t in Model)
+@foreach (var t in Model.Distinct())
 {
     @if (t.Projects.ArchiveTaskId == t.TaskId)
     {
@@ -13,7 +13,7 @@
                 Tasks
             </div>
         </li>
-        @foreach (var s in t.Subtasks)
+        @foreach (var s in t.Subtasks.Distinct())
         {
             <li>
                 <div class="text-user-in-proj">

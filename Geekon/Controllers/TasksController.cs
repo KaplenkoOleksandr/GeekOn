@@ -30,12 +30,12 @@ namespace Geekon.Controllers
             ViewBag.projId = projId;
 
             var _taskContext = from t in _context.Tasks
-                               where t.ProjId == projId && !t.Archive
+                               where t.ProjectsProjId == projId && !t.Archive
                                select t;
             foreach (var t in _taskContext)
             {
                 var _subtaskContext = from s in _context.Subtasks
-                                      where s.TaskId == t.TaskId && !s.Archive
+                                      where s.TasksTaskId == t.TaskId && !s.Archive
                                       select s;
 
                 foreach (var s in _subtaskContext.Distinct())
@@ -43,7 +43,7 @@ namespace Geekon.Controllers
             }
 
             var access = from ac in _context.ProjectUsers
-                         where ac.UserId == _userManager.GetUserId(User) && ac.ProjectId == projId
+                         where ac.UserId == _userManager.GetUserId(User) && ac.ProjectProjectId == projId
                          select ac;
 
             if (access.Count() == 0)
@@ -87,7 +87,7 @@ namespace Geekon.Controllers
             {
                 //Tasks tasks = new Tasks();
                 tasks.TaskName = "New category";
-                tasks.ProjId = (int)projId;
+                tasks.ProjectsProjId = (int)projId;
                 tasks.Archive = false;
                 _context.Add(tasks);
                 _context.SaveChanges();
@@ -96,7 +96,7 @@ namespace Geekon.Controllers
                 Subtasks subtask = new Subtasks();
                 subtask.SubtaskName = "New task";
                 subtask.Status = Models.TaskStatus.ToDo;
-                subtask.TaskId = tasks.TaskId;
+                subtask.TasksTaskId = tasks.TaskId;
                 subtask.Date = DateTime.Today;
                 subtask.Archive = false;
                 _context.Add(subtask);

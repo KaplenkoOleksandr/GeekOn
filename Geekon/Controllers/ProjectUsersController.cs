@@ -27,7 +27,7 @@ namespace Geekon.Controllers
             string userId = _userManager.GetUserId(User);
 
             var _projContext = from p in _context.Projects
-                               join us in _context.ProjectUsers on p.ProjectId equals us.ProjectId
+                               join us in _context.ProjectUsers on p.ProjectId equals us.ProjectProjectId
                                where us.UserId == userId
                                select p;
 
@@ -43,7 +43,7 @@ namespace Geekon.Controllers
             }
 
             var _usersContext = from us in _context.ProjectUsers
-                                where us.ProjectId == projId
+                                where us.ProjectProjectId == projId
                                 select us;
 
             List<string> usersEmail = new List<string>();
@@ -67,7 +67,7 @@ namespace Geekon.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ProjectId,UserId")] ProjectUsers projectUsers)
+        public async Task<IActionResult> Create([Bind("Id,ProjectProjectId,UserId")] ProjectUsers projectUsers)
         {
             if (ModelState.IsValid)
             {
@@ -75,7 +75,7 @@ namespace Geekon.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId", projectUsers.ProjectId);
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId", projectUsers.ProjectProjectId);
             return View(projectUsers);
         }
 
@@ -92,7 +92,7 @@ namespace Geekon.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId", projectUsers.ProjectId);
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId", projectUsers.ProjectProjectId);
             return View(projectUsers);
         }
 
@@ -118,11 +118,11 @@ namespace Geekon.Controllers
                     }
                     else
                     {
-                        var projUser = await _context.ProjectUsers.FirstOrDefaultAsync(p => p.UserId == user.Id && p.ProjectId == projId);
+                        var projUser = await _context.ProjectUsers.FirstOrDefaultAsync(p => p.UserId == user.Id && p.ProjectProjectId == projId);
                         if (projUser == null)
                         {
                             ProjectUsers projectUser = new ProjectUsers();
-                            projectUser.ProjectId = projId;
+                            projectUser.ProjectProjectId = projId;
                             projectUser.UserId = user.Id;
                             _context.Add(projectUser);
                             await _context.SaveChangesAsync();
