@@ -122,21 +122,22 @@ namespace Geekon.Controllers
         {
             try
             {
-                var oldSubtask = await _context.Subtasks.FirstOrDefaultAsync(o => o.SubtaskId == subtasks.SubtaskId);
-                if (oldSubtask.Archive != subtasks.Archive)
+                var oldSubtask = _context.Subtasks.AsNoTracking().First(o => o.SubtaskId == subtasks.SubtaskId).Archive;
+                if (oldSubtask != subtasks.Archive)
                 {
                     var task = await _context.Tasks.FirstOrDefaultAsync(t => t.TaskId == subtasks.TaskId);
                     var proj = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == task.ProjId);
 
+                    var arch = subtasks.ArchiveTaskId;
                     subtasks.ArchiveTaskId = subtasks.TaskId;
-                    subtasks.TaskId = oldSubtask.ArchiveTaskId;
+                    subtasks.TaskId = arch;
 
                     if (!subtasks.Archive)
                     {
-                        var archTask = await _context.Tasks.FirstOrDefaultAsync(a => a.TaskId == oldSubtask.ArchiveTaskId);
+                        var archTask = await _context.Tasks.FirstOrDefaultAsync(a => a.TaskId == subtasks.TaskId);
                         if (archTask == null)
                         {
-                            var firstTask = await _context.Tasks.FirstOrDefaultAsync(f => f.ProjId == proj.ProjectId && f.TaskId != oldSubtask.TaskId);
+                            var firstTask = await _context.Tasks.FirstOrDefaultAsync(f => f.ProjId == proj.ProjectId && f.TaskId != subtasks.ArchiveTaskId);
                             if (firstTask != null)
                                 subtasks.TaskId = firstTask.TaskId;
                             else
@@ -153,6 +154,11 @@ namespace Geekon.Controllers
                             }
                         }
                     }
+                }
+
+                if(subtasks.ExecutorId == "iamexecutor")
+                {
+                    subtasks.ExecutorId = _userManager.GetUserId(User);
                 }
 
                 _context.Update(subtasks);

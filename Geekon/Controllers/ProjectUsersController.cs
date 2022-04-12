@@ -35,22 +35,24 @@ namespace Geekon.Controllers
         }
 
         // GET: ProjectUsers/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? projId)
         {
-            if (id == null)
+            if (projId == null)
             {
                 return NotFound();
             }
 
-            var projectUsers = await _context.ProjectUsers
-                .Include(p => p.Project)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (projectUsers == null)
+            var _usersContext = from us in _context.ProjectUsers
+                                where us.ProjectId == projId
+                                select us;
+
+            List<string> usersEmail = new List<string>();
+            foreach (var user in _usersContext)
             {
-                return NotFound();
+                usersEmail.Add(_userManager.FindByIdAsync(user.UserId).Result.Email);
             }
 
-            return View(projectUsers);
+            return View(usersEmail);
         }
 
         // GET: ProjectUsers/Create
@@ -99,35 +101,43 @@ namespace Geekon.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ProjectId,UserId")] ProjectUsers projectUsers)
+        public async Task<IActionResult> Edit(int? projId, string emails)
         {
-            if (id != projectUsers.Id)
+            if(projId == null)
+            {
+                NotFound();
+            }
+            try
+            {
+                string[] email = emails.Split();
+                foreach (var e in email)
+                {
+                    var user = _userManager.FindByEmailAsync(e).Result;
+                    if (user.Id == null)
+                    {
+                        NotFound();
+                    }
+                    else
+                    {
+                        var projUser = await _context.ProjectUsers.FirstOrDefaultAsync(p => p.UserId == user.Id);
+                        if (projUser == null)
+                        {
+                            ProjectUsers projectUser = new ProjectUsers();
+                            projectUser.ProjectId = projId;
+                            projectUser.UserId = user.Id;
+                            _context.Add(projectUser);
+                        }
+                    }
+                }
+                await _context.SaveChangesAsync();
+                return View(null);
+
+            }
+            catch
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(projectUsers);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProjectUsersExists(projectUsers.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId", projectUsers.ProjectId);
-            return View(projectUsers);
         }
 
         // GET: ProjectUsers/Delete/5

@@ -59,21 +59,29 @@ namespace Geekon.Controllers
         }
 
         // GET: Projects/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? projId)
         {
-            if (id == null)
+            if (projId == null)
             {
                 return NotFound();
             }
 
-            var projects = await _context.Projects
-                .FirstOrDefaultAsync(m => m.ProjectId == id);
-            if (projects == null)
+            var proj = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == projId);
+            var archTask = await _context.Tasks.FirstOrDefaultAsync(a => a.ProjId == projId && a.TaskId == proj.ArchiveTaskId);
+
+            List<Tasks> archiveTasks = new List<Tasks>();
+            archiveTasks.Add(archTask);
+
+            var tasks = from t in _context.Tasks
+                        where t.Archive
+                        select t;
+
+            foreach(var t in tasks)
             {
-                return NotFound();
+                archiveTasks.Add(t);
             }
 
-            return View(projects);
+            return View(archiveTasks);
         }
 
         // GET: Projects/Create
