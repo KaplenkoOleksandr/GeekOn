@@ -163,6 +163,26 @@ namespace Geekon.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AnArchive(int taskId)
+        {
+            try
+            {
+                var tasks = await _context.Tasks
+                    .Where(t => t.TaskId == taskId).FirstOrDefaultAsync();
+
+                tasks.Archive = false;
+
+                _context.Update(tasks);
+                await _context.SaveChangesAsync();
+                return View(tasks);
+            }
+            catch
+            {
+                return NotFound();
+            }
+        }
+
         // GET: Tasks/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

@@ -171,6 +171,48 @@ namespace Geekon.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AnArchive([Bind("SubtaskId,SubtaskName,TaskId,Status,ExecutorId,Date,Comment,Archive,ArchiveTaskId")] Subtasks subtasks)
+        {
+            try
+            {
+                var task = await _context.Tasks.FirstOrDefaultAsync(t => t.TaskId == subtasks.TaskId);
+                var proj = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == task.ProjId);
+
+                var arch = subtasks.ArchiveTaskId;
+                subtasks.ArchiveTaskId = subtasks.TaskId;
+                subtasks.TaskId = arch;
+
+                var archTask = await _context.Tasks.FirstOrDefaultAsync(a => a.TaskId == subtasks.TaskId);
+                if (archTask == null)
+                {
+                    var firstTask = await _context.Tasks.FirstOrDefaultAsync(f => f.ProjId == proj.ProjectId && f.TaskId != subtasks.ArchiveTaskId);
+                    if (firstTask != null)
+                        subtasks.TaskId = firstTask.TaskId;
+                    else
+                    {
+                        Tasks newTask = new Tasks();
+                        newTask.TaskName = "New category";
+                        newTask.ProjId = proj.ProjectId;
+                        newTask.Archive = false;
+                        newTask.Subtasks.Add(subtasks);
+                        _context.Add(newTask);
+                        _context.SaveChanges();
+
+                        subtasks.TaskId = newTask.TaskId;
+                    }
+                }
+
+                _context.Update(subtasks);
+                await _context.SaveChangesAsync();
+                return View();
+            }
+            catch
+            {
+                return NotFound();
+            }
+        }
+
         // GET: Subtasks/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
