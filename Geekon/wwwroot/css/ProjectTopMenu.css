@@ -328,3 +328,30 @@
 
 
 /*///////////////////////////////////////////////////////*/
+
+.icon-folder-in-proj {
+    height: 40px;
+    width: 40px;
+    border-radius: 100%;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(51 92 67);
+    font-size: 20px;
+}
+
+    .icon-folder-in-proj :hover {
+        height: 40px;
+        width: 40px;
+        border-radius: 100%;
+        background-color: rgb(51 92 67);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+

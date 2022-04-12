@@ -7,11 +7,11 @@
         <i class='bx bx-menu' id="btn"></i>
     </div>
     <ul class="nav-list">
-        <li>
+        @*<li>
             <i class='bx bx-search'></i>
             <input type="text" placeholder="Search...">
             <span class="tooltip">Search</span>
-        </li>
+        </li>*@
         <li>
             <a asp-controller="Home" asp-action="Index">
                 <i class='bx bx-home'></i>
@@ -44,7 +44,7 @@
             <div class="profile-details">
                 <!--<img src="profile.jpg" alt="profileImg">-->
                 <div class="name_job">
-                    <div class="name">Ivan</div>
+                    <div class="name">@SignInManager.UserManager.GetUserAsync(User).Result.Email</div>
                     <div class="job">User</div>
                 </div>
             </div>
