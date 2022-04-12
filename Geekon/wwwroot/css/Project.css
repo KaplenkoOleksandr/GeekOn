@@ -8,18 +8,6 @@
     outline:none;
 }
 
-.proj-top-menu {
-    height: 60px;
-    padding: 12px 12px 0 12px;
-    width: inherit;
-}
-
-.top-menu-cont {
-    height: 48px;
-    width: 100%;
-    background-color: rgba(32,123,232,0.3);
-}
-
 .items {
     position: relative;
     width: 100%;

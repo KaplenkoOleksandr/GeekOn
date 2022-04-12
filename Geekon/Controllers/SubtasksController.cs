@@ -118,25 +118,26 @@ namespace Geekon.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<IActionResult> Edit([Bind("SubtaskId,SubtaskName,TaskId,Status,ExecutorId,Date,Comment,Archive")] Subtasks subtasks)
+        public async Task<IActionResult> Edit([Bind("SubtaskId,SubtaskName,TaskId,Status,ExecutorId,Date,Comment,Archive,ArchiveTaskId")] Subtasks subtasks)
         {
             try
             {
-                var oldSubtask = await _context.Subtasks.FirstOrDefaultAsync(o => o.SubtaskId == subtasks.SubtaskId);
-                if (oldSubtask.Archive != subtasks.Archive)
+                var oldSubtask = _context.Subtasks.AsNoTracking().First(o => o.SubtaskId == subtasks.SubtaskId).Archive;
+                if (oldSubtask != subtasks.Archive)
                 {
                     var task = await _context.Tasks.FirstOrDefaultAsync(t => t.TaskId == subtasks.TaskId);
                     var proj = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == task.ProjId);
 
+                    var arch = subtasks.ArchiveTaskId;
                     subtasks.ArchiveTaskId = subtasks.TaskId;
-                    subtasks.TaskId = oldSubtask.ArchiveTaskId;
+                    subtasks.TaskId = arch;
 
                     if (!subtasks.Archive)
                     {
-                        var archTask = await _context.Tasks.FirstOrDefaultAsync(a => a.TaskId == oldSubtask.ArchiveTaskId);
+                        var archTask = await _context.Tasks.FirstOrDefaultAsync(a => a.TaskId == subtasks.TaskId);
                         if (archTask == null)
                         {
-                            var firstTask = await _context.Tasks.FirstOrDefaultAsync(f => f.ProjId == proj.ProjectId && f.TaskId != oldSubtask.TaskId);
+                            var firstTask = await _context.Tasks.FirstOrDefaultAsync(f => f.ProjId == proj.ProjectId && f.TaskId != subtasks.ArchiveTaskId);
                             if (firstTask != null)
                                 subtasks.TaskId = firstTask.TaskId;
                             else
@@ -155,12 +156,18 @@ namespace Geekon.Controllers
                     }
                 }
 
+                if (subtasks.ExecutorId == "iamexecutor")
+                {
+                    subtasks.ExecutorId = _userManager.GetUserId(User);
+                }
+
                 _context.Update(subtasks);
                 await _context.SaveChangesAsync();
                 return PartialView("_PartialSubtaskEdit", subtasks);
             }
-            catch
+            catch( Exception e)
             {
+                string a = e.Message;
                 return NotFound();
             }
         }
@@ -185,13 +192,12 @@ namespace Geekon.Controllers
 
         // POST: Subtasks/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var subtasks = await _context.Subtasks.FindAsync(id);
             _context.Subtasks.Remove(subtasks);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return View(subtasks);
         }
 
         private bool SubtasksExists(int id)

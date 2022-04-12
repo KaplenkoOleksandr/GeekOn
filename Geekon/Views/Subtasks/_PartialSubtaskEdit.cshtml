@@ -3,162 +3,212 @@
 @using Microsoft.AspNetCore.Identity
 @inject UserManager<IdentityUser> userManager
 
-<link href="~/css/editSubtask.css" rel="stylesheet" />
 
-<div class="modal" id="editSubtask">
-    <form id="edit-subtask-form" asp-action="Edit" class="edit-sub-model-content">
+    <div class="modal" id="editSubtask">
+        <form id="edit-subtask-form" asp-action="Edit" class="edit-sub-model-content">
 
-        <input asp-for="SubtaskId" type="hidden" />
-        <input asp-for="TaskId" type="hidden" />
-        <input id="executorId" asp-for="ExecutorId" type="hidden" />
-        <input id="archiveBool" asp-for="Archive" type="hidden" />
-        <input id="statusString" asp-for="Status" type="hidden" />
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="SubtaskId" type="hidden" />
+            <input asp-for="TaskId" type="hidden" />
+            <input id="executorId" asp-for="ExecutorId" type="hidden" />
+            <input id="archiveBool" asp-for="Archive" type="hidden" />
+            <input id="statusString" asp-for="Status" type="hidden" />
+            <input asp-for="ArchiveTaskId" type="hidden" />
 
-        <div class="edit-sub-info">
-            <div class="edit-sub-name">
-                <input asp-for="SubtaskName" required>
-                <div class="underline"></div>
-                <span asp-validation-for="SubtaskName" class="text-danger"></span>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="edit-sub-info">
+                <div class="edit-sub-name">
+                    <input asp-for="SubtaskName" required>
+                    <div class="underline"></div>
+                    <span asp-validation-for="SubtaskName" class="text-danger"></span>
+                </div>
+                <div style="display:flex; flex-direction:row;">
+                    <div class="edit-sub-info-archive">
+                        @if (Model.Archive == false)
+                        {
+                            <div class="cube show-front" id="corner-archive">
+                                <div class="archive__face--front archive__face" onclick="CHANGE_ARCHIVE()"><i class='bx bxs-archive-in'></i></div>
+                                <div class="archive__face--bottom archive__face" onclick="CHANGE_ARCHIVE()"><i class='bx bxs-archive-out'></i></div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="cube show-bottom" id="corner-archive">
+                                <div class="archive__face archive__face--front" onclick="CHANGE_ARCHIVE()"><i class='bx bxs-archive-in'></i></div>
+                                <div class="archive__face archive__face--bottom" onclick="CHANGE_ARCHIVE()"><i class='bx bxs-archive-out'></i></div>
+                            </div>
+                        }
+                    </div>
+                    <div class="sub-delete" onclick="DELETE_SUBTASK(@Model.SubtaskId)">
+                        <i class='bx bxs-trash'></i>
+                    </div>
+                </div>
             </div>
-            <div style="display:flex; flex-direction:row;">
-                <div class="edit-sub-info-archive">
-                    @if (Model.Archive == false)
+
+            <div class="edit-sub-info">
+                <div class="edit-sub-info-user">
+                    @if (Model.ExecutorId == null || Model.ExecutorId == "")
                     {
-                        <div class="cube show-front" id="corner-archive">
-                            <div class="archive__face archive__face--front" onclick="CHANGE_ARCHIVE()">false</div>
-                            <div class="archive__face archive__face--bottom" onclick="">true</div>
+                        <div class="cube show-front" id="corner-user">
+                            <div class="cube__face cube__face--front" onclick="CHANGE_EXECUTOR()">
+                                <div>
+                                    THIS TASK IS AVAILABLE.
+                                </div>
+                                <div class="take-it">TAKE IT!</div>
+                            </div>
+                            <div class="cube__face cube__face--bottom" onclick="CHANGE_EXECUTOR()">
+                                <div>this is your task</div>
+                                <div>(click to drop it 0_0 )</div>
+                            </div>
+                        </div>
+                    }
+                    else if (Model.ExecutorId == userManager.GetUserId(User))
+                    {
+                        <div class="cube show-bottom" id="corner-user">
+                            <div class="cube__face cube__face--front" onclick="CHANGE_EXECUTOR()">
+                                <div>
+                                    THIS TASK IS AVAILABLE.
+                                </div>
+                                <div class="take-it">TAKE IT!</div>
+                            </div>
+                            <div class="cube__face cube__face--bottom" onclick="CHANGE_EXECUTOR()">
+                                <div>this is your task</div>
+                                <div>(click to drop it 0_0 )</div>
+                            </div>
                         </div>
                     }
                     else
                     {
-                        <div class="cube show-bottom" id="corner-archive">
-                            <div class="archive__face archive__face--front" onclick="">false</div>
-                            <div class="archive__face archive__face--bottom" onclick="">true</div>
+                        <div class="cube">
+                            <div class="cube__face cube__face--front">@User.Identity.Name</div>
                         </div>
                     }
                 </div>
-                <div class="sub-delete" onclick="@Model.SubtaskId">P</div>
-            </div>
-        </div>
-
-        <div class="edit-sub-info">
-            <div class="edit-sub-info-user">
-                @if (Model.ExecutorId == null || Model.ExecutorId == "")
-                {
-                    <div class="cube show-front" id="corner-user">
-                        <div class="cube__face cube__face--front" onclick="">front</div>
-                        <div class="cube__face cube__face--bottom" onclick="">bottom</div>
+                <div class="edit-sub-info-status">
+                    <div class="menu">
+                        <div class="toggle">
+                            <div class="toggle-text" id="toggle-text"></div>
+                            <div class="toggle-icon" id="toggle-icon"></div>
+                        </div>
+                        <li style="--i:0">
+                            <div onclick="SELECT_STATUS(0)">
+                                <i class='bx bx-square'></i>
+                            </div>
+                        </li>
+                        <li style="--i:1">
+                            <div onclick="SELECT_STATUS(1)">
+                                <i class='bx bxs-hourglass'></i>
+                            </div>
+                        </li>
+                        <li style="--i:2">
+                            <div onclick="SELECT_STATUS(2)">
+                                <i class='bx bx-check-square'></i>
+                            </div>
+                        </li>
+                        <li style="--i:3">
+                            <div onclick="SELECT_STATUS(3)">
+                                <i class='bx bx-bug'></i>
+                            </div>
+                        </li>
                     </div>
-                }
-                else if (Model.ExecutorId == userManager.GetUserId(User))
-                {
-                    <div class="cube show-bottom" id="corner-user">
-                        <div class="cube__face cube__face--front" onclick="">front</div>
-                        <div class="cube__face cube__face--bottom" onclick="">bottom</div>
-                    </div>
-                }
-                else
-                {
-                    <div class="cube">
-                        <div class="cube__face cube__face--front">sdfsddg</div>
-                    </div>
-                }
-            </div>
-            <div class="edit-sub-info-status">
-                <div class="menu">
-                    <div class="toggle">
-                        <div class="toggle-text" id="toggle-text"></div>
-                        <div class="toggle-icon" id="toggle-icon"></div>
-                    </div>
-                    <li style="--i:0">
-                        <a href="#">
-                            <i class='bx bx-square'></i>
-                        </a>
-                    </li>
-                    <li style="--i:1">
-                        <a href="#">
-                            <i class='bx bxs-hourglass'></i>
-                        </a>
-                    </li>
-                    <li style="--i:2">
-                        <a href="#">
-                            <i class='bx bx-check-square'></i></i>
-                        </a>
-                    </li>
-                    <li style="--i:3">
-                        <a href="#">
-                            <i class='bx bx-bug'></i>
-                        </a>
-                    </li>
                 </div>
             </div>
-        </div>
-        <div style="width:500px; display:flex;">
-            <div class="edit-sub-date" style="align-self: flex-start;">
-                <input asp-for="Date" class="sub-input sub-input-date" />
-                <span asp-validation-for="Date" class="text-danger"></span>
+            <div style="width:500px; display:flex;">
+                <div class="edit-sub-date" style="align-self: flex-start;">
+                    <input asp-for="Date" class="sub-input sub-input-date" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
             </div>
-        </div>
-        <div class="edit-sub-description">
-            <textarea asp-for="Comment" class="sub-input sub-input-comment"></textarea>
-            <span asp-validation-for="Comment" class="text-danger"></span>
-        </div>
-        <input type="submit" value="Save" onclick="" class="sub-input-submit-button" />
-    </form>
-</div>
+            <div class="edit-sub-description">
+                <textarea asp-for="Comment" class="sub-input sub-input-comment"></textarea>
+                <span asp-validation-for="Comment" class="text-danger"></span>
+            </div>
+            <input type="submit" value="Save" onclick="SUBMIT_MODAL_SUBTASK_EDIT(event)" class="sub-input-submit-button" />
+        </form>
+    </div>
 
-<script>
-    var toggleText = document.getElementById('toggle-text');
-    var toggleIcon = document.getElementById('toggle-icon');
-    var statusString = document.getElementById('statusString'); //ToDo, InProgress, Finished, Blocked
+    <script>
+        var toggleText = document.getElementById('toggle-text');
+        var toggleIcon = document.getElementById('toggle-icon');
+        var statusString = document.getElementById('statusString'); //ToDo, InProgress, Finished, Bugs
 
-    console.log(statusInt.value);
-
-
-    var toggle = document.querySelector('.toggle');
-    var menu = document.querySelector('.menu');
-    toggle.onclick = function () {
-        document.getElementById('toggle-text').classList.toggle('sub-status-text');
-        setTimeout(function () {
-            menu.classList.toggle('active');
-            document.getElementById('toggle-text').classList.toggle('toggle-text');
-            document.getElementById('toggle-text').classList.toggle('class_display_none')
-        }, 200);
-    }
-
-
-    var archiveBool = document.getElementById('archiveBool');
-
-    var isArchive = true;
-    if (archiveBool.value == "false" || archiveBool.value == "False") {
-        isArchive = false;
-    }
-
-    function CHANGE_ARCHIVE() {
-        isArchive = !isArchive;
-
-        archiveBool.value = isArchive;
-
-        document.getElementById('corner-archive').classList.toggle('show-front');
-        document.getElementById('corner-archive').classList.toggle('show-bottom');
-    }
-
-    var active = true;
-    if (document.getElementById('corner-user') != null && document.getElementById('corner-user').classList.contains('show-front')) {
-        var active = false;
-    }
-
-    function CHANGE_EXECUTOR() {
-        let executorId = document.getElementById('executorId');
-        active = !active;
-        if (active) {
-            executorId.value = "iamexecutor";
+        if (statusString.value == "ToDo") {
+            toggleText.innerHTML = `To Do`;
+            toggleIcon.innerHTML = `<i class='bx bx-square'></i>`;
+        } else if (statusString.value == "InProgress") {
+            toggleText.innerHTML = `In Progress`;
+            toggleIcon.innerHTML = `<i class='bx bxs-hourglass'></i>`;
+        } else if (statusString.value == "Finished") {
+            toggleText.innerHTML = `Finished`;
+            toggleIcon.innerHTML = `<i class='bx bx-check-square'></i>`;
+        } else if (statusString.value == "Bugs") {
+            toggleText.innerHTML = `Bugs`;
+            toggleIcon.innerHTML = `<i class='bx bx-bug'></i>`;
         }
-        else {
-            executorId.value = "";
+
+        function SELECT_STATUS(option) {
+            if (option == 0) {
+                toggleText.innerHTML = `To Do`;
+                toggleIcon.innerHTML = `<i class='bx bx-square'></i>`;
+                statusString.value = "ToDo";
+            } else if (option == 1) {
+                toggleText.innerHTML = `In Progress`;
+                toggleIcon.innerHTML = `<i class='bx bxs-hourglass'></i>`;
+                statusString.value = "InProgress";
+            } else if (option == 2) {
+                toggleText.innerHTML = `Finished`;
+                toggleIcon.innerHTML = `<i class='bx bx-check-square'></i>`;
+                statusString.value = "Finished";
+            } else if (option == 3) {
+                toggleText.innerHTML = `Bugs`;
+                toggleIcon.innerHTML = `<i class='bx bx-bug'></i>`;
+                statusString.value = "Bugs";
+            }
         }
-        document.getElementById('corner-user').classList.toggle('show-front');
-        document.getElementById('corner-user').classList.toggle('show-bottom');
-    }
-</script>
+
+        var toggle = document.querySelector('.toggle');
+        var menu = document.querySelector('.menu');
+        toggle.onclick = function () {
+            document.getElementById('toggle-text').classList.toggle('sub-status-text');
+            setTimeout(function () {
+                menu.classList.toggle('active');
+                document.getElementById('toggle-text').classList.toggle('toggle-text');
+                document.getElementById('toggle-text').classList.toggle('class_display_none')
+            }, 200);
+        }
+
+
+        var archiveBool = document.getElementById('archiveBool');
+
+        var isArchive = true;
+        if (archiveBool.value == "false" || archiveBool.value == "False") {
+            isArchive = false;
+        }
+
+        function CHANGE_ARCHIVE() {
+            isArchive = !isArchive;
+
+            archiveBool.value = isArchive;
+
+            document.getElementById('corner-archive').classList.toggle('show-front');
+            document.getElementById('corner-archive').classList.toggle('show-bottom');
+        }
+
+        var active = true;
+        if (document.getElementById('corner-user') != null && document.getElementById('corner-user').classList.contains('show-front')) {
+            var active = false;
+        }
+
+        function CHANGE_EXECUTOR() {
+            let executorId = document.getElementById('executorId');
+            active = !active;
+            if (active) {
+                executorId.value = "iamexecutor";
+            }
+            else {
+                executorId.value = "";
+            }
+            document.getElementById('corner-user').classList.toggle('show-front');
+            document.getElementById('corner-user').classList.toggle('show-bottom');
+        }
+    </script>

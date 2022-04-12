@@ -4,7 +4,6 @@
     ViewData["Title"] = "Index";
 }
 
-<link href="~/css/Project.css" rel="stylesheet" />
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
 <div id="editSubtaskPlaceholder"></div>
@@ -12,7 +11,78 @@
 <div style="background: url('/projBack/@Model.ProjImagePath'); background-size: cover; background-repeat: no-repeat;">
     <div class="proj-top-menu">
         <div class="top-menu-cont">
-            <div class="top-menu-cont-name"></div>
+            <div class="top-menu-name">GeekOn</div>
+            <div class="top-menu-icon">ICON</div>
+
+
+            <details id="archive-in-proj">
+                <summary id="summary-archive">
+                    MASHAAAAAAAAAA
+                    <i class="bx bx-chevron-left"></i>
+                </summary>
+                <ul>
+                    <li>
+                        <div class="all-icon-user-in-proj">
+                            <i class='bx bx-user'></i>
+                        </div>
+                        <div class="text-user-in-proj">
+                            romashka.123478369@gmail.comgcyfufyfffuyfu
+                        </div>
+                    </li>
+                    <li>Item 2</li>
+                    <li>Item 3</li>
+                    <li>Item 4</li>
+                    <li>Item 5</li>
+                    <li>Item 1</li>
+                    <li>Item 2</li>
+                    <li>Item 3</li>
+                    <li>Item 4</li>
+                    <li>Item 5</li>
+                </ul>
+            </details>
+
+
+            <details id="all-users-in-proj">
+                <summary id="summary-users">
+                    Shared Users
+                    <i class="bx bx-chevron-left"></i>
+                </summary>
+                <ul>
+                    <li>
+                        <div class="all-icon-user-in-proj">
+                            <i class='bx bx-user'></i>
+                        </div>
+                        <div class="text-user-in-proj">
+                            romashka.123478369@gmail.comgcyfufyfffuyfu
+                        </div>
+                    </li>
+                    <li>Item 2</li>
+                    <li>Item 3</li>
+                    <li>Item 4</li>
+                    <li>Item 5</li>
+                    <li>Item 1</li>
+                    <li>Item 2</li>
+                    <li>Item 3</li>
+                    <li>Item 4</li>
+                    <li>Item 5</li>
+                </ul>
+            </details>
+
+            <div class="top-menu-add-user">
+                <div id="user_add_input_cont" class="add-user-input-cont">
+                    <div onclick="ADD_USER_OPEN_HIDE_INPUT()" class="user-add-arrow">
+                        <i class='bx bx-chevron-right'></i>
+                    </div>
+                    <input id="inputUser" type="text" value="" class="add-user-input" />
+                </div>
+                <div id="user_add_button" class="add-user-button" onclick="ADD_USER_BUTTON()">
+                    <div>ADD USER</div>
+                    <div class="add-user-button-icon">
+                        <i class='bx bx-user-plus'></i>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
     <div id="placeholderForTasks" class="items"></div>
@@ -30,4 +100,34 @@
             $("#placeholderForTasks").html(res)
         }
     })
+
+    function ADD_USER_OPEN_HIDE_INPUT() {
+        var input_user_CONT = document.getElementById('user_add_input_cont');
+        var user_add_button = document.getElementById('user_add_button');
+
+        input_user_CONT.classList.toggle('top-menu-input-active');
+        user_add_button.classList.toggle('top-menu-button-active');
+    }
+
+    function ADD_USER_BUTTON() {
+        var input_user = document.getElementById('inputUser');
+        var input_user_CONT = document.getElementById('user_add_input_cont');
+
+        if (input_user_CONT.classList.contains('top-menu-input-active')
+            && input_user.value != null && input_user.value.trim() != "") {
+            $.ajax({
+                type: "POST",
+                url: "/ProjectUsers/Edit",
+                data: {
+                    projId: @Model.ProjectId,
+                    email: input_user.value,
+                },
+                success: function (res) {
+                    input_user.value = "";
+                }
+            })
+        } else {
+            ADD_USER_OPEN_HIDE_INPUT();
+        }
+    }
 </script>

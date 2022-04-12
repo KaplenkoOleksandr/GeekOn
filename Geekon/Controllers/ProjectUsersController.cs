@@ -98,36 +98,17 @@ namespace Geekon.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ProjectId,UserId")] ProjectUsers projectUsers)
+        public async Task<IActionResult> Edit(int projId, string email)
         {
-            if (id != projectUsers.Id)
+            try
+            {
+                
+                return View();
+            }
+            catch 
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(projectUsers);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProjectUsersExists(projectUsers.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId", projectUsers.ProjectId);
-            return View(projectUsers);
         }
 
         // GET: ProjectUsers/Delete/5

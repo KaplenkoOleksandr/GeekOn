@@ -37,6 +37,7 @@ namespace Geekon.Controllers
                 var _subtaskContext = from s in _context.Subtasks
                                       where s.TaskId == t.TaskId && !s.Archive
                                       select s;
+
                 foreach (var s in _subtaskContext.Distinct())
                     t.Subtasks.Add(s);
             }

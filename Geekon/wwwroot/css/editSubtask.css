@@ -58,6 +58,19 @@
     height: 50px;
     background-color: rgb(60 74 60);
     border-radius: 7px;
+    color:white;
+    padding:5px;
+    font-size:15px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    cursor:pointer;
+}
+
+.cube__face:hover {
+    box-shadow: 0 0 5px #fff;
 }
 
 .archive__face {
@@ -66,7 +79,14 @@
     height: 40px;
     background-color: rgb(60 74 60);
     border-radius: 7px;
+    font-size: 25px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }
+
 
 .archive__face--front {
     transform: rotateY( 0deg) translateZ(20px);
@@ -204,34 +224,38 @@
         transition: 0.5s;
         transition-delay: calc(0.1s * var(--i));
         transform: rotate(0deg) translateX(100px);
+        cursor:pointer;
     }
 
     .menu.active li {
         transform: rotate(calc(90deg / -3 * var(--i)));
     }
 
-    .menu li a {
+    .menu li div {
         display: flex;
         justify-content: center;
         align-items: center;
         width: 40px;
         height: 40px;
-        background: #fff;
+        background-color: rgb(60 74 60);
         border-radius: 50%;
         transform: rotate(calc(90deg / 3 * var(--i)));
         transition: 0.5s;
+        color:white;
     }
 
-        .menu li a:hover {
-            color: cyan;
+        .menu li div:hover {
+            color: rgb(60 74 60);
+            background-color: white;
         }
 
 
 .toggle {
     position: absolute;
-    width: 200px;
+    width: 160px;
     height: 50px;
-    background: #fff;
+    background-color: rgb(60 74 60);
+    color:white;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -239,7 +263,7 @@
     border-radius: 7px;
     cursor: pointer;
     /*box-shadow: 0 0 4px #fff;*/
-    font-size: 14px;
+    font-size: 25px;
     transition: 1.25s;
     overflow: hidden;
 }
@@ -259,6 +283,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size:18px;
 }
 
 .toggle-icon {
@@ -279,4 +304,10 @@
     width: 40px;
     background-color: rgb(60 74 60);
     border-radius: 7px;
+    font-size: 25px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }
