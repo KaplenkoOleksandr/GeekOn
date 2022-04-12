@@ -175,7 +175,27 @@ namespace Geekon.Controllers
 
                 _context.Update(tasks);
                 await _context.SaveChangesAsync();
-                return View(tasks);
+                return PartialView("_partialEmpty");
+            }
+            catch
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Archive(int taskId)
+        {
+            try
+            {
+                var tasks = await _context.Tasks
+                    .Where(t => t.TaskId == taskId).FirstOrDefaultAsync();
+
+                tasks.Archive = true;
+
+                _context.Update(tasks);
+                await _context.SaveChangesAsync();
+                return PartialView("_partialEmpty");
             }
             catch
             {
@@ -207,13 +227,6 @@ namespace Geekon.Controllers
         {
             try
             {
-                //    var subtasks = await _context.Subtasks.Where(s => s.TaskId == taskId).ToListAsync();
-
-                //    //delete all subtasks from task
-                //    foreach (var s in subtasks)
-                //        _context.Subtasks.Remove(s);
-                //    _context.SaveChanges();
-
                 var tasks = _context.Tasks.Where(t => t.TaskId == taskId).Include(t => t.Subtasks);
 
                 foreach (var s in tasks.FirstOrDefault().Subtasks)
@@ -223,7 +236,7 @@ namespace Geekon.Controllers
                 //delete task
                 _context.Tasks.Remove(tasks.FirstOrDefault());
                 _context.SaveChanges();
-                return PartialView();
+                return PartialView("_partialEmpty");
             }
             catch (Exception e)
             {

@@ -23,7 +23,7 @@
                     <span asp-validation-for="SubtaskName" class="text-danger"></span>
                 </div>
                 <div style="display:flex; flex-direction:row;">
-                    <div class="edit-sub-info-archive">
+                    <div class="edit-sub-info-archive" title="Archive">
                         @if (Model.Archive == false)
                         {
                             <div class="cube show-front" id="corner-archive">
@@ -39,7 +39,7 @@
                             </div>
                         }
                     </div>
-                    <div class="sub-delete" onclick="DELETE_SUBTASK(@Model.SubtaskId)">
+                    <div title="Delete" class="sub-delete" onclick="DELETE_SUBTASK(@Model.SubtaskId)">
                         <i class='bx bxs-trash'></i>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                     else
                     {
                         <div class="cube">
-                            <div class="cube__face cube__face--front">@User.Identity.Name</div>
+                            <div class="cube__face cube__face--front">@userManager.FindByIdAsync(Model.ExecutorId).Result.Email</div>
                         </div>
                     }
                 </div>

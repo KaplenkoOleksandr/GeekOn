@@ -69,6 +69,29 @@
         }
     })
 
+    function TASK_ANARCHIVE(taskId) {
+        $.ajax({
+            type: "POST",
+            url: "/Tasks/AnArchive",
+            data: {
+                taskId: taskId,
+            },
+            success: function () {
+                GET_PROJECT_DETAILS();
+                 $.ajax({
+                    type: "GET",
+                    url: "/Tasks",
+                    data: {
+                        projId: @Model.ProjectId,
+                     },
+                     success: function (res) {
+                         $("#placeholderForTasks").html(res);
+                    }
+                })
+            }
+        })
+    }
+
     function SUB_ANARCHIVE(subId) {
         $.ajax({
             type: "POST",

@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -24,14 +26,18 @@
             <h3 style="color: white; margin-left: 330px; margin-top: 10px; font-size: 25px;">Dwight D. Eisenhower</h3>
         </div>
     </div>
-    <div class="back_left">
-        <div class="button_back">
-            <div class="my_button">
-                <h3 style="color: rgb(176 251 117); font-size: 25px;">Start with us!</h3>
-                <i class='bx bxs-chevrons-down bx-fade-down arrow'></i>
+
+    @if (!SignInManager.IsSignedIn(User))
+    {
+        <a class="back_left" asp-area="Identity" asp-page="/Account/Login">
+            <div class="button_back">
+                <div class="my_button">
+                    <h3 style="color: rgb(176 251 117); font-size: 25px;">Start with us!</h3>
+                    <i class='bx bxs-chevrons-down bx-fade-down arrow'></i>
+                </div>
             </div>
-        </div>
-    </div>
+        </a>
+    }
     <section>
         <div class="layer layer1"></div>
         <div class="layer layer2"></div>

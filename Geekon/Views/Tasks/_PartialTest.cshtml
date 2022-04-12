@@ -7,8 +7,8 @@
             <input id="taskName{@task.TaskId}" class="taskName" type="text" value="@task.TaskName" onfocusout="EDIT_TASK_SUBMIT(@task.TaskId)" />
 
             <div id="taskMenu{@task.TaskId}" class="task-menu">
-                <div><i class='bx bxs-archive-in' onclick="TASK_MENU_ARCHIVE(@task.TaskId)"></i></div>
-                <div><i class='bx bxs-trash'  onclick="TASK_MENU_DELETE(@task.TaskId)"></i></div>
+                <div title="Archive"><i class='bx bxs-archive-in' onclick="TASK_MENU_ARCHIVE(@task.TaskId)"></i></div>
+                <div title="Delete"><i class='bx bxs-trash'  onclick="TASK_MENU_DELETE(@task.TaskId)"></i></div>
             </div>
             <div class="item-options-lines" onclick="TASK_MENU_OPEN_CLOSE(@task.TaskId)">
                 <i class='bx bx-menu lines' id="btn"></i>
@@ -60,9 +60,33 @@
     }
 
     function TASK_MENU_DELETE(taskId) {
+        if (confirm("Confirm delete?")) {
+            $.ajax({
+                type: "POST",
+                url: "/Tasks/Delete",
+                data: {
+                    taskId: taskId,
+                },
+                success: function (res) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/Tasks",
+                        data: {
+                            projId: @ViewBag.projId,
+                        },
+                        success: function (res) {
+                            $("#placeholderForTasks").html(res);
+                        }
+                    })
+                }
+            })
+        }
+    }
+
+    function TASK_MENU_ARCHIVE(taskId) {
         $.ajax({
             type: "POST",
-            url: "/Tasks/DELETE",
+            url: "/Tasks/Archive",
             data: {
                 taskId: taskId,
             },
@@ -137,26 +161,28 @@
     }
 
     function DELETE_SUBTASK(id) {
-        $.ajax({
-            type: "POST",
-            url: "/Subtasks/DELETE",
-            data: {
-                id: id,
-            },
-            success: function (res) {
-                $.ajax({
-                    type: "GET",
-                    url: "/Tasks",
-                    data: {
-                        projId: @ViewBag.projId,
-                    },
-                    success: function (res) {
-                        $("#editSubtaskPlaceholder").find('.modal').modal('hide');
-                        $("#placeholderForTasks").html(res);
-                    }
-                })
-            }
-        })
+        if (confirm("Confirm DELETE?")) {
+            $.ajax({
+                type: "POST",
+                url: "/Subtasks/DELETE",
+                data: {
+                    id: id,
+                },
+                success: function (res) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/Tasks",
+                        data: {
+                            projId: @ViewBag.projId,
+                        },
+                        success: function (res) {
+                            $("#editSubtaskPlaceholder").find('.modal').modal('hide');
+                            $("#placeholderForTasks").html(res);
+                        }
+                    })
+                }
+            })
+        }
     }
 
     function OPEN_MODAL_SUBTASK_EDIT(id) {
