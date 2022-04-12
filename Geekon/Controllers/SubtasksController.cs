@@ -156,7 +156,7 @@ namespace Geekon.Controllers
                     }
                 }
 
-                if (subtasks.ExecutorId == "iamexecutor")
+                if(subtasks.ExecutorId == "iamexecutor")
                 {
                     subtasks.ExecutorId = _userManager.GetUserId(User);
                 }
@@ -165,9 +165,8 @@ namespace Geekon.Controllers
                 await _context.SaveChangesAsync();
                 return PartialView("_PartialSubtaskEdit", subtasks);
             }
-            catch( Exception e)
+            catch
             {
-                string a = e.Message;
                 return NotFound();
             }
         }

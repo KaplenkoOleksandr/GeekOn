@@ -1,4 +1,9 @@
 ﻿@model IEnumerable<Geekon.Models.Projects>
+@using Microsoft.AspNetCore.Identity;
+@using System.Security.Claims
+
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor
+
 
 @{
     ViewData["Title"] = "Index";
@@ -7,7 +12,7 @@
 <div id="CreatePlaceHolder"></div>
 
 <div style="padding: 50px;">
-    <h1>Projects</h1>
+    <h1>My projects</h1>
     <div class="projContainer">
 
         @*CREATE SQUARE*@
@@ -17,22 +22,76 @@
         </div>
         @foreach (var p in Model)
         {
-            <a class="proj" href="@Url.Action("Index", "Projects", new { id = p.ProjectId })"
-               style="background: url('/projBack/@p.ProjImagePath'); background-size: contain;">
-                <div class="projSlider">
-                    <div class="projName">@p.ProjName</div>
-                    <div class="projLine"></div>
-                    <div class="projCreationDate">@p.DateCreate</div>
-                    <div class="projOwnerInfo">
-                        <div class="projOwnerPhoto"></div>
-                        <div>
-                            <div class="projOwnerName">dfgh</div>
-                            <div class="projOwnerEmail">dartyuio@sdfghj</div>
+            @if (p.CreatorId == _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value && !p.Archive)
+            {
+                <a class="proj" href="@Url.Action("Index", "Projects", new { id = p.ProjectId })"
+                   style="background: url('/projBack/@p.ProjImagePath'); background-size: contain;">
+                    <div class="projSlider">
+                        <div class="projName">@p.ProjName</div>
+                        <div class="projLine"></div>
+                        <div class="projCreationDate">@p.DateCreate</div>
+                        <div class="projOwnerInfo">
+                            <div class="projOwnerPhoto"></div>
+                            <div>
+                                <div class="projOwnerName">dfgh</div>
+                                <div class="projOwnerEmail">dartyuio@sdfghj</div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <i class='bx bx-folder projFolder' title="Project Folder"></i>
-            </a>
+                    <i class='bx bx-folder projFolder' title="Project Folder"></i>
+                </a>
+            }
+        }
+    </div>
+    <div class="projContainer">
+
+        <h1>Shared projects</h1>
+        @foreach (var p in Model)
+        {
+            @if (p.CreatorId != _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value && !p.Archive)
+            {
+                <a class="proj" href="@Url.Action("Index", "Projects", new { id = p.ProjectId })"
+                   style="background: url('/projBack/@p.ProjImagePath'); background-size: contain;">
+                    <div class="projSlider">
+                        <div class="projName">@p.ProjName</div>
+                        <div class="projLine"></div>
+                        <div class="projCreationDate">@p.DateCreate</div>
+                        <div class="projOwnerInfo">
+                            <div class="projOwnerPhoto"></div>
+                            <div>
+                                <div class="projOwnerName">dfgh</div>
+                                <div class="projOwnerEmail">dartyuio@sdfghj</div>
+                            </div>
+                        </div>
+                    </div>
+                    <i class='bx bx-folder projFolder' title="Project Folder"></i>
+                </a>
+            }
+        }
+    </div>
+    <div class="projContainer">
+        <h1>Archived projects</h1>
+        @foreach (var p in Model)
+        {
+            @if (p.Archive)
+            {
+                <a class="proj" href="@Url.Action("Index", "Projects", new { id = p.ProjectId })"
+                   style="background: url('/projBack/@p.ProjImagePath'); background-size: contain;">
+                    <div class="projSlider">
+                        <div class="projName">@p.ProjName</div>
+                        <div class="projLine"></div>
+                        <div class="projCreationDate">@p.DateCreate</div>
+                        <div class="projOwnerInfo">
+                            <div class="projOwnerPhoto"></div>
+                            <div>
+                                <div class="projOwnerName">dfgh</div>
+                                <div class="projOwnerEmail">dartyuio@sdfghj</div>
+                            </div>
+                        </div>
+                    </div>
+                    <i class='bx bx-folder projFolder' title="Project Folder"></i>
+                </a>
+            }
         }
     </div>
 </div>

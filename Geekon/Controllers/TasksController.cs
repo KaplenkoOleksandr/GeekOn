@@ -30,7 +30,7 @@ namespace Geekon.Controllers
             ViewBag.projId = projId;
 
             var _taskContext = from t in _context.Tasks
-                               where t.ProjId == projId
+                               where t.ProjId == projId && !t.Archive
                                select t;
             foreach (var t in _taskContext)
             {
