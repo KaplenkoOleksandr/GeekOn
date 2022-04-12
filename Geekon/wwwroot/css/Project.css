@@ -70,28 +70,6 @@
     padding:0px 10px;
 }
 
-.item-options-lines {
-    height: 25px;
-    width: 25px;
-    border-radius: 5px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    cursor:pointer;
-}
-
-.lines {
-    font-size: 20px;
-}
-
-    .item-options-lines:hover {
-        background-color: white;
-    }
-
-    .item-options-lines:hover .lines {
-        color: #555555;
-    }
-
 .sub-item-container {
     overflow-x: hidden;
     max-height: 80vh;
@@ -154,4 +132,58 @@
 
 .myy {
     background-color: #92ac6d;
+}
+
+
+.item-options-lines {
+    height: 25px;
+    width: 25px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.lines {
+    font-size: 20px;
+}
+
+.item-options-lines:hover {
+    background-color: white;
+}
+
+.item-options-lines:hover .lines {
+    color: #555555;
+}
+
+.task-menu {
+    transition:1s;
+    transform:translateY(-200%);
+    overflow:hidden;
+
+    margin-right:10px;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    font-size:20px;
+}
+
+.task-menu-active {
+    transform:translateX(0);
+}
+
+.task-menu div {
+    height: 25px;
+    width: 25px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.task-menu div:hover {
+    background-color: white;
+    color: #555555;
 }

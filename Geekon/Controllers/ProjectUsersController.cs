@@ -100,7 +100,7 @@ namespace Geekon.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<IActionResult> Edit(int projId, string email)
+        public async Task<IActionResult> Edit(int projId, string emails)
         {
             if(projId == null)
             {
@@ -112,25 +112,24 @@ namespace Geekon.Controllers
                 foreach (var e in email)
                 {
                     var user = _userManager.FindByEmailAsync(e).Result;
-                    if (user.Id == null)
+                    if (user == null)
                     {
-                        NotFound();
+                        
                     }
                     else
                     {
-                        var projUser = await _context.ProjectUsers.FirstOrDefaultAsync(p => p.UserId == user.Id);
+                        var projUser = await _context.ProjectUsers.FirstOrDefaultAsync(p => p.UserId == user.Id && p.ProjectId == projId);
                         if (projUser == null)
                         {
                             ProjectUsers projectUser = new ProjectUsers();
                             projectUser.ProjectId = projId;
                             projectUser.UserId = user.Id;
                             _context.Add(projectUser);
+                            await _context.SaveChangesAsync();
                         }
                     }
                 }
-                await _context.SaveChangesAsync();
-                return View();
-
+                return PartialView();
             }
             catch
             {

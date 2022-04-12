@@ -17,11 +17,20 @@
 }
 
 .top-menu-name {
-    
+    font-size:30px;
+    max-width:200px;
+    overflow:hidden;
+
+    background-color: transparent;
+    border:none;
+    color:white;
 }
 
 .top-menu-icon {
-    
+    background: url('../geekon(G) (green).svg') no-repeat;
+    height: 40px;
+    width: 40px;
+    background-size: cover;
 }
 
 /*/////////////////////////////////////////////////////////////*/
@@ -36,7 +45,7 @@
 #summary-users {
     cursor: pointer;
     border-radius: 5px;
-    background-color: rgb(51 92 67);
+    background-color: rgb(51, 92, 67);
     list-style: none;
     height: 40px;
     display: flex;

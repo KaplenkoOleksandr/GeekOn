@@ -5,7 +5,12 @@
     <div class="item" onmousedown="stopProp(event)">
         <div class="item-name-text">
             <input id="taskName{@task.TaskId}" class="taskName" type="text" value="@task.TaskName" onfocusout="EDIT_TASK_SUBMIT(@task.TaskId)" />
-            <div class="item-options-lines">
+
+            <div id="taskMenu{@task.TaskId}" class="task-menu">
+                <div><i class='bx bxs-archive-in'></i></div>
+                <div><i class='bx bxs-trash'></i></div>
+            </div>
+            <div class="item-options-lines" onclick="TASK_MENU_OPEN_CLOSE(@task.TaskId)">
                 <i class='bx bx-menu lines' id="btn"></i>
             </div>
         </div>
@@ -54,8 +59,14 @@
         event.stopPropagation();
     }
 
+    function TASK_MENU_OPEN_CLOSE(taskId) {
+        var task = document.getElementById("taskMenu{" + taskId + "}");
+
+        task.classList.toggle('task-menu-active');
+    }
+
     function EDIT_TASK_SUBMIT(taskId) {
-        var taskName = document.getElementById("taskName" + taskId).value;
+        var taskName = document.getElementById("taskName{" + taskId+"}").value;
         $.ajax({
             type: "POST",
             url: "/Tasks/Edit",

@@ -11,8 +11,8 @@
 <div style="background: url('/projBack/@Model.ProjImagePath'); background-size: cover; background-repeat: no-repeat;">
     <div class="proj-top-menu">
         <div class="top-menu-cont">
-            <div class="top-menu-name">GeekOn</div>
-            <div class="top-menu-icon">ICON</div>
+            <div class="top-menu-icon"></div>
+            <input id="projNameInput" class="top-menu-name" value="@Model.ProjName" onfocusout="EDIT_PROJ_NAME()" />
 
 
             <details id="archive-in-proj">
@@ -101,6 +101,22 @@
         }
     })
 
+    function EDIT_PROJ_NAME() {
+        var projNameInput = document.getElementById('projNameInput');
+        $.ajax({
+            type: "POST",
+            url: "/Projects/EditName",
+            data: {
+                projId: @Model.ProjectId,
+                projName: projNameInput.value,
+            },
+            success: function (res) {
+            },
+            error: function () {
+            }
+        })
+    }
+
     function ADD_USER_OPEN_HIDE_INPUT() {
         var input_user_CONT = document.getElementById('user_add_input_cont');
         var user_add_button = document.getElementById('user_add_button');
@@ -120,10 +136,15 @@
                 url: "/ProjectUsers/Edit",
                 data: {
                     projId: @Model.ProjectId,
-                    email: input_user.value,
+                    emails: input_user.value,
                 },
                 success: function (res) {
-                    input_user.value = "";
+                    alert("Sent!");
+                    inputUser.value = "";
+                },
+                error: function (res) {
+                    alert("Problems!");
+                    inputUser.value = "";
                 }
             })
         } else {

@@ -182,6 +182,23 @@ namespace Geekon.Controllers
             return View(projects);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> EditName(int projId, string projName)
+        {
+            try
+            {
+                var projects = _context.Projects.Where(p => p.ProjectId == projId).FirstOrDefault();
+                projects.ProjName = projName;
+                _context.Update(projects);
+                await _context.SaveChangesAsync();
+                return PartialView();
+            }
+            catch
+            {
+                return NotFound();
+            }
+        }
+
         // POST: Projects/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
