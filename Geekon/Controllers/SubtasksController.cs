@@ -27,7 +27,7 @@ namespace Geekon.Controllers
             if (taskId == null)
                 return NotFound();
 
-            var _subtaskContext = _context.Subtasks.Where(s => s.TaskId == taskId);
+            var _subtaskContext = _context.Subtasks.Where(s => s.TasksTaskId == taskId);
 
             if (_subtaskContext == null)
                 return NotFound();
@@ -46,12 +46,12 @@ namespace Geekon.Controllers
             if (subtasks == null)
                 return NotFound();
 
-            var task = await _context.Tasks.FirstOrDefaultAsync(t => t.TaskId == subtasks.TaskId);
+            var task = await _context.Tasks.FirstOrDefaultAsync(t => t.TaskId == subtasks.TasksTaskId);
 
-            var proj = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == task.ProjId);
+            var proj = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == task.ProjectsProjId);
 
             var access = from ac in _context.ProjectUsers
-                         where ac.UserId == _userManager.GetUserId(User) && ac.ProjectId == proj.ProjectId
+                         where ac.UserId == _userManager.GetUserId(User) && ac.ProjectProjectId == proj.ProjectId
                          select ac;
 
             if (access.Count() == 0)
@@ -76,7 +76,7 @@ namespace Geekon.Controllers
             {
                 subtasks.Status = Models.TaskStatus.ToDo;
                 subtasks.SubtaskName = "New task";
-                subtasks.TaskId = (int)taskId;
+                subtasks.TasksTaskId = (int)taskId;
                 subtasks.Date = DateTime.Today;
                 subtasks.Archive = false;
                 _context.Add(subtasks);
@@ -85,7 +85,7 @@ namespace Geekon.Controllers
                 var task = await _context.Tasks.FirstOrDefaultAsync(t => t.TaskId == taskId);
                 task.Subtasks.Add(subtasks);
                 //_context.Update(task);
-                var proj = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == task.ProjId);
+                var proj = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == task.ProjectsProjId);
                 subtasks.ArchiveTaskId = proj.ArchiveTaskId;
 
                 await _context.SaveChangesAsync();
@@ -118,20 +118,15 @@ namespace Geekon.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<IActionResult> Edit([Bind("SubtaskId,SubtaskName,TaskId,Status,ExecutorId,Date,Comment,Archive,ArchiveTaskId")] Subtasks subtasks)
+        public async Task<IActionResult> Edit([Bind("SubtaskId,SubtaskName,TasksTaskId,Status,ExecutorId,Date,Comment,Archive,ArchiveTaskId")] Subtasks subtasks)
         {
             try
             {
-                var oldSubtask = _context.Subtasks.AsNoTracking().First(o => o.SubtaskId == subtasks.SubtaskId).Archive;
-                if (oldSubtask != subtasks.Archive)
+                if (subtasks.Archive)
                 {
-                    var task = await _context.Tasks.FirstOrDefaultAsync(t => t.TaskId == subtasks.TaskId);
-                    var proj = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == task.ProjId);
-
                     var arch = subtasks.ArchiveTaskId;
-                    subtasks.ArchiveTaskId = subtasks.TaskId;
-                    subtasks.TaskId = arch;
-
+                    subtasks.ArchiveTaskId = subtasks.TasksTaskId;
+                    subtasks.TasksTaskId = arch;
                 }
 
                 if(subtasks.ExecutorId == "iamexecutor")
@@ -155,31 +150,31 @@ namespace Geekon.Controllers
             try
             {
                 var subtasks = await _context.Subtasks.AsNoTracking().FirstOrDefaultAsync(s => s.SubtaskId == subId);
-                var task = await _context.Tasks.FirstOrDefaultAsync(t => t.TaskId == subtasks.TaskId);
-                var proj = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == task.ProjId);
+                var task = await _context.Tasks.FirstOrDefaultAsync(t => t.TaskId == subtasks.TasksTaskId);
+                var proj = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == task.ProjectsProjId);
 
                 var arch = subtasks.ArchiveTaskId;
-                subtasks.ArchiveTaskId = subtasks.TaskId;
-                subtasks.TaskId = arch;
+                subtasks.ArchiveTaskId = subtasks.TasksTaskId;
+                subtasks.TasksTaskId = arch;
                 subtasks.Archive = !subtasks.Archive;
 
-                var archTask = await _context.Tasks.FirstOrDefaultAsync(a => a.TaskId == subtasks.TaskId);
+                var archTask = await _context.Tasks.FirstOrDefaultAsync(a => a.TaskId == subtasks.TasksTaskId);
                 if (archTask == null)
                 {
-                    var firstTask = await _context.Tasks.FirstOrDefaultAsync(f => f.ProjId == proj.ProjectId && f.TaskId != subtasks.ArchiveTaskId);
+                    var firstTask = await _context.Tasks.FirstOrDefaultAsync(f => f.ProjectsProjId == proj.ProjectId && f.TaskId != subtasks.ArchiveTaskId);
                     if (firstTask != null)
-                        subtasks.TaskId = firstTask.TaskId;
+                        subtasks.TasksTaskId = firstTask.TaskId;
                     else
                     {
                         Tasks newTask = new Tasks();
                         newTask.TaskName = "New category";
-                        newTask.ProjId = proj.ProjectId;
+                        newTask.ProjectsProjId = proj.ProjectId;
                         newTask.Archive = false;
                         newTask.Subtasks.Add(subtasks);
                         _context.Add(newTask);
                         _context.SaveChanges();
 
-                        subtasks.TaskId = newTask.TaskId;
+                        subtasks.TasksTaskId = newTask.TaskId;
                     }
                 }
 

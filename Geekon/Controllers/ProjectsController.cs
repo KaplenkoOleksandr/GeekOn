@@ -49,7 +49,7 @@ namespace Geekon.Controllers
                 return NotFound();
 
             var access = from ac in _context.ProjectUsers
-                         where ac.UserId == _userManager.GetUserId(User) && ac.ProjectId == id
+                         where ac.UserId == _userManager.GetUserId(User) && ac.ProjectProjectId == id
                          select ac;
 
             if (access.Count() == 0)
@@ -67,21 +67,21 @@ namespace Geekon.Controllers
             }
 
             var proj = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == projId);
-            var archTask = await _context.Tasks.FirstOrDefaultAsync(a => a.ProjId == projId && a.TaskId == proj.ArchiveTaskId);
+            var archTask = await _context.Tasks.FirstOrDefaultAsync(a => a.ProjectsProjId == projId && a.TaskId == proj.ArchiveTaskId);
 
             List<Tasks> archiveTasks = new List<Tasks>();
             archiveTasks.Add(archTask);
 
             var _subtaskContext = from s in _context.Subtasks
-                                  where s.TaskId == archTask.TaskId && s.Archive
+                                  where s.TasksTaskId == archTask.TaskId && s.Archive
                                   select s;
 
             foreach (var s in _subtaskContext.Distinct())
                 archTask.Subtasks.Add(s);
 
-            var tasks = _context.Tasks.Where(t => t.Archive && t.TaskId != proj.ArchiveTaskId && t.ProjId == projId).Distinct();
+            var tasks = _context.Tasks.Where(t => t.Archive && t.TaskId != proj.ArchiveTaskId && t.ProjectsProjId == projId).Distinct();
 
-            foreach(var t in tasks)
+            foreach(var t in tasks.Distinct())
             {
                 archiveTasks.Add(t);
             }
@@ -123,7 +123,7 @@ namespace Geekon.Controllers
                 // add Project-User row
                 ProjectUsers projectUser = new ProjectUsers();
                 projectUser.Project = projects;
-                projectUser.ProjectId = projects.ProjectId;
+                projectUser.ProjectProjectId = projects.ProjectId;
                 projectUser.UserId = projects.CreatorId;
                 _context.ProjectUsers.Add(projectUser);
                 _context.SaveChanges();
@@ -131,7 +131,7 @@ namespace Geekon.Controllers
                 // add first Task into new project
                 Tasks tasks = new Tasks();
                 tasks.TaskName = "New category";
-                tasks.ProjId = projects.ProjectId;
+                tasks.ProjectsProjId = projects.ProjectId;
                 tasks.Archive = false;
                 _context.Add(tasks);
                 _context.SaveChanges();
@@ -141,7 +141,7 @@ namespace Geekon.Controllers
                 Subtasks subtask = new Subtasks();
                 subtask.SubtaskName = "New task";
                 subtask.Status = Models.TaskStatus.ToDo;
-                subtask.TaskId = tasks.TaskId;
+                subtask.TasksTaskId = tasks.TaskId;
                 subtask.Date = DateTime.Today;
                 subtask.Archive = false;
                 _context.Add(subtask);
@@ -151,7 +151,7 @@ namespace Geekon.Controllers
                 // add archive Task into new project
                 Tasks archTasks = new Tasks();
                 archTasks.TaskName = "Archive";
-                archTasks.ProjId = projects.ProjectId;
+                archTasks.ProjectsProjId = projects.ProjectId;
                 archTasks.Archive = true;
                 _context.Add(archTasks);
                 _context.SaveChanges();
@@ -250,7 +250,7 @@ namespace Geekon.Controllers
 
             //delete all connetions project with users
             var projUsers = from pu in _context.ProjectUsers
-                            where pu.ProjectId == id
+                            where pu.ProjectProjectId == id
                             select pu;
             foreach (var pu in projUsers)
                 _context.ProjectUsers.Remove(pu);

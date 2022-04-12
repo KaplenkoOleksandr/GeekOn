@@ -17,7 +17,7 @@ namespace Geekon.Models
         [Required]
         [Display(Name = "Task group name")]
         public string TaskName { get; set; }
-        public int ProjId { get; set; }
+        public int ProjectsProjId { get; set; }
         public bool Archive { get; set; }
 
         public virtual Projects Projects { get; set; }

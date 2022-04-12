@@ -20,7 +20,7 @@ namespace Geekon.Models
         public DateTime Date { get; set; }
         [Display(Name = "Comment")]
         public string Comment { get; set; }
-        public int TaskId { get; set; }
+        public int TasksTaskId { get; set; }
         public bool Archive { get; set; }
         public int ArchiveTaskId { get; set; }
 
