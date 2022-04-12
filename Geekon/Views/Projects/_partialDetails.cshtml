@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Geekon.Models.Tasks>
+
+
+@foreach (var t in Model)
+{
+    @if (t.Projects.ArchiveTaskId == t.TaskId)
+    {
+        <li>
+            <div class="list-icon-archive-in-proj">
+                <i class='bx bx-list-ul'></i>
+            </div>
+            <div class="text-user-in-proj" style="font-size: 18px">
+                Tasks
+            </div>
+        </li>
+        @foreach (var s in t.Subtasks)
+        {
+            <li>
+                <div class="text-user-in-proj">
+                    @s.SubtaskName
+                </div>
+                <div class="all-icon-archive-in-proj">
+                    <i class='bx bxs-archive-out'></i>
+                </div>
+            </li>
+
+        }
+    }
+    else
+    {
+        <li>
+            <div class="list-icon-archive-in-proj">
+                <i class='bx bx-list-ul'></i>
+            </div>
+            <div class="text-user-in-proj" style="font-size: 18px">
+                Categories
+            </div>
+        </li>
+        <li>
+            <div class="text-user-in-proj">
+                @t.TaskName
+            </div>
+            <div class="all-icon-archive-in-proj">
+                <i class='bx bxs-archive-out'></i>
+            </div>
+        </li>
+    }
+
+} 

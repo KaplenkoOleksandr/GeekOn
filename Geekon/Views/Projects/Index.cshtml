@@ -16,55 +16,23 @@
 
 
             <details id="archive-in-proj">
-                <summary id="summary-archive">
-                    MASHAAAAAAAAAA
+                <summary id="summary-archive" onclick="GET_PROJECT_DETAILS()">
+                    Archive
                     <i class="bx bx-chevron-left"></i>
                 </summary>
-                <ul>
-                    <li>
-                        <div class="all-icon-user-in-proj">
-                            <i class='bx bx-user'></i>
-                        </div>
-                        <div class="text-user-in-proj">
-                            romashka.123478369@gmail.comgcyfufyfffuyfu
-                        </div>
-                    </li>
-                    <li>Item 2</li>
-                    <li>Item 3</li>
-                    <li>Item 4</li>
-                    <li>Item 5</li>
-                    <li>Item 1</li>
-                    <li>Item 2</li>
-                    <li>Item 3</li>
-                    <li>Item 4</li>
-                    <li>Item 5</li>
+                <ul id="placeholderFORArchive">
+
                 </ul>
             </details>
 
 
             <details id="all-users-in-proj">
-                <summary id="summary-users">
+                <summary id="summary-users" onclick="GET_PROJECTUSERS_DETAILS()">
                     Shared Users
                     <i class="bx bx-chevron-left"></i>
                 </summary>
-                <ul>
-                    <li>
-                        <div class="all-icon-user-in-proj">
-                            <i class='bx bx-user'></i>
-                        </div>
-                        <div class="text-user-in-proj">
-                            romashka.123478369@gmail.comgcyfufyfffuyfu
-                        </div>
-                    </li>
-                    <li>Item 2</li>
-                    <li>Item 3</li>
-                    <li>Item 4</li>
-                    <li>Item 5</li>
-                    <li>Item 1</li>
-                    <li>Item 2</li>
-                    <li>Item 3</li>
-                    <li>Item 4</li>
-                    <li>Item 5</li>
+                <ul id="placeholderForUsers">
+                    
                 </ul>
             </details>
 
@@ -100,6 +68,32 @@
             $("#placeholderForTasks").html(res)
         }
     })
+
+    function GET_PROJECT_DETAILS() {
+        $.ajax({
+        type: "GET",
+        url: "/Projects/Details",
+        data: {
+            projId: @Model.ProjectId,
+        },
+        success: function (res) {
+            $("#placeholderFORArchive").html(res)
+        }
+    })
+    }
+
+    function GET_PROJECTUSERS_DETAILS() {
+        $.ajax({
+        type: "GET",
+        url: "/ProjectUsers/Details",
+        data: {
+            projId: @Model.ProjectId,
+        },
+        success: function (res) {
+            $("#placeholderForUsers").html(res)
+        }
+    })
+    }
 
     function ADD_USER_OPEN_HIDE_INPUT() {
         var input_user_CONT = document.getElementById('user_add_input_cont');

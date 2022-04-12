@@ -52,7 +52,7 @@ namespace Geekon.Controllers
                 usersEmail.Add(_userManager.FindByIdAsync(user.UserId).Result.Email);
             }
 
-            return View(usersEmail);
+            return PartialView("_partialDetails", usersEmail);
         }
 
         // GET: ProjectUsers/Create
@@ -100,7 +100,7 @@ namespace Geekon.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<IActionResult> Edit(int projId, string email)
+        public async Task<IActionResult> Edit(int projId, string emails)
         {
             if(projId == null)
             {
