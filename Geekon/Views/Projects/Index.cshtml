@@ -69,17 +69,40 @@
         }
     })
 
+    function SUB_ANARCHIVE(subId) {
+        $.ajax({
+            type: "POST",
+            url: "/Subtasks/AnArchive",
+            data: {
+                subId: subId,
+            },
+            success: function () {
+                GET_PROJECT_DETAILS();
+                 $.ajax({
+                    type: "GET",
+                    url: "/Tasks",
+                    data: {
+                        projId: @Model.ProjectId,
+                     },
+                     success: function (res) {
+                         $("#placeholderForTasks").html(res);
+                    }
+                })
+            }
+        })
+    }
+
     function GET_PROJECT_DETAILS() {
         $.ajax({
-        type: "GET",
-        url: "/Projects/Details",
-        data: {
-            projId: @Model.ProjectId,
-        },
-        success: function (res) {
-            $("#placeholderFORArchive").html(res)
-        }
-    })
+            type: "GET",
+            url: "/Projects/Details",
+            data: {
+                projId: @Model.ProjectId,
+            },
+            success: function (res) {
+                $("#placeholderFORArchive").html(res)
+            }
+        })
     }
 
     function GET_PROJECTUSERS_DETAILS() {

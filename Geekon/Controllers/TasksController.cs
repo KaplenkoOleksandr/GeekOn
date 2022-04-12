@@ -203,18 +203,33 @@ namespace Geekon.Controllers
 
         // POST: Tasks/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int taskId)
         {
-            var tasks = await _context.Tasks.FindAsync(id);
+            try
+            {
+                //    var subtasks = await _context.Subtasks.Where(s => s.TaskId == taskId).ToListAsync();
 
-            //delete all subtasks from task
-            foreach (var s in tasks.Subtasks)
-                _context.Subtasks.Remove(s);
-            //delete task
-            _context.Tasks.Remove(tasks);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+                //    //delete all subtasks from task
+                //    foreach (var s in subtasks)
+                //        _context.Subtasks.Remove(s);
+                //    _context.SaveChanges();
+
+                var tasks = _context.Tasks.Where(t => t.TaskId == taskId).Include(t => t.Subtasks);
+
+                foreach (var s in tasks.FirstOrDefault().Subtasks)
+                    if(!s.Archive)
+                        _context.Subtasks.Remove(s);
+
+                //delete task
+                _context.Tasks.Remove(tasks.FirstOrDefault());
+                _context.SaveChanges();
+                return PartialView();
+            }
+            catch (Exception e)
+            {
+                string a = e.Message;
+                return NotFound();
+            }
         }
 
         private bool TasksExists(int id)
