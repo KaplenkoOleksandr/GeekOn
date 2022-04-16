@@ -11,46 +11,49 @@
 <div style="background: url('/projBack/@Model.ProjImagePath'); background-size: cover; background-repeat: no-repeat;">
     <div class="proj-top-menu">
         <div class="top-menu-cont">
-            <div class="top-menu-icon"></div>
-            <input id="projNameInput" class="top-menu-name" value="@Model.ProjName" onfocusout="EDIT_PROJ_NAME()" />
-
-
-            <details id="archive-in-proj">
-                <summary id="summary-archive" onclick="GET_PROJECT_DETAILS()">
-                    Archive
-                    <i class="bx bx-chevron-left"></i>
-                </summary>
-                <ul id="placeholderFORArchive">
-                </ul>
-            </details>
-
-
-            <details id="all-users-in-proj">
-                <summary id="summary-users" onclick="GET_PROJECTUSERS_DETAILS()">
-                    Shared Users
-                    <i class="bx bx-chevron-left"></i>
-                </summary>
-                <ul id="placeholderForUsers">
-                </ul>
-            </details>
-
-            <div class="top-menu-add-user">
-                <div id="user_add_input_cont" class="add-user-input-cont">
-                    <div onclick="ADD_USER_OPEN_HIDE_INPUT()" class="user-add-arrow">
-                        <i class='bx bx-chevron-right'></i>
-                    </div>
-                    <input id="inputUser" type="text" value="" class="add-user-input" />
-                </div>
-                <div id="user_add_button" class="add-user-button" onclick="ADD_USER_BUTTON()">
-                    <div>ADD USER</div>
-                    <div class="add-user-button-icon">
-                        <i class='bx bx-user-plus'></i>
-                    </div>
-                </div>
+            <div style="display:flex; justify-content:center; align-items:center">
+                <div class="top-menu-icon"></div>
+                <input id="projNameInput" class="top-menu-name" value="@Model.ProjName" onfocusout="EDIT_PROJ_NAME()" />
             </div>
 
-            <div class="icon-folder-in-proj">
-                <i class='bx bx-folder'></i>
+            <div style="display:flex; justify-content:center; align-items:center">
+                <details id="archive-in-proj">
+                    <summary id="summary-archive" onclick="GET_PROJECT_DETAILS()">
+                        Archive
+                        <i class="bx bx-chevron-left"></i>
+                    </summary>
+                    <ul id="placeholderFORArchive">
+                    </ul>
+                </details>
+
+                <details id="all-users-in-proj">
+                    <summary id="summary-users" onclick="GET_PROJECTUSERS_DETAILS()">
+                        Shared Users
+                        <i class="bx bx-chevron-left"></i>
+                    </summary>
+                    <ul id="placeholderForUsers">
+                    </ul>
+                </details>
+
+                <div class="top-menu-add-user">
+                    <div id="user_add_input_cont" class="add-user-input-cont">
+                        <div onclick="ADD_USER_OPEN_HIDE_INPUT()" class="user-add-arrow">
+                            <i class='bx bx-chevron-right'></i>
+                        </div>
+                        <input id="inputUser" type="text" value="" class="add-user-input" />
+                    </div>
+                    <div id="user_add_button" class="add-user-button" onclick="ADD_USER_BUTTON()">
+                        <div>ADD USER</div>
+                        <div class="add-user-button-icon">
+                            <i class='bx bx-user-plus'></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="icon-folder-in-proj">
+                    <i class='bx bx-folder'></i>
+                </div>
+
             </div>
         </div>
     </div>
@@ -184,7 +187,7 @@
                     inputUser.value = "";
                 },
                 error: function (res) {
-                    alert("Problems!");
+                    alert("Sent!");
                     inputUser.value = "";
                 }
             })

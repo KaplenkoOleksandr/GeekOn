@@ -17,13 +17,13 @@
 }
 
 .top-menu-name {
-    font-size:30px;
-    max-width:200px;
-    overflow:hidden;
-
+    font-size: 30px;
+    max-width: 200px;
+    overflow: hidden;
     background-color: transparent;
-    border:none;
-    color:white;
+    border: none;
+    color: white;
+    justify-self: flex-start;
 }
 
 .top-menu-icon {
@@ -31,6 +31,7 @@
     height: 40px;
     width: 40px;
     background-size: cover;
+    justify-self: flex-start;
 }
 
 /*/////////////////////////////////////////////////////////////*/
@@ -141,6 +142,7 @@
     display: flex;
     align-items: center;
     overflow: hidden;
+    margin:0 10px;
 }
 
 .add-user-button {
@@ -177,8 +179,12 @@
 
 .top-menu-input-active {
     transform: translateX(0);
-    transition: 1s;
+    width: 200px;
 }
+
+    .top-menu-input-active .add-user-input {
+        width: 170px;
+    }
 
 .add-user-input {
     display: flex;
@@ -191,6 +197,8 @@
     color: white;
     margin-right: 5px;
     border-radius: 7px;
+    width: 10px;
+    transition: 1s;
 }
 
 .user-add-arrow {
@@ -206,6 +214,7 @@
 /*/////////////////////////////////////////////////////////////*/
 #archive-in-proj {
     position: relative;
+    margin-right:10px;
 }
 
     #archive-in-proj[open] {
