@@ -89,6 +89,40 @@ namespace Geekon.Controllers
             return PartialView("_partialDetails", archiveTasks);
         }
 
+        public IActionResult Statistic(int? projId)
+        {
+            var tasks = _context.Tasks.Where(t => !t.Archive && t.ProjectsProjId == projId).Include(t => t.Subtasks);
+
+            int toDo = 0, inProg = 0, fin = 0, bugs = 0;
+
+            foreach(var t in tasks)
+            {
+                foreach(var s in t.Subtasks)
+                {
+                    if (!s.Archive && s.Status == Models.TaskStatus.ToDo)
+                        toDo ++;
+                    if (!s.Archive && s.Status == Models.TaskStatus.InProgress)
+                        inProg ++;
+                    if (!s.Archive && s.Status == Models.TaskStatus.Finished)
+                        fin ++;
+                    if (!s.Archive && s.Status == Models.TaskStatus.Bugs)
+                        bugs ++;
+                }
+
+            }
+
+            Dictionary<Models.TaskStatus, int> stat = new Dictionary<Models.TaskStatus, int>();
+
+            stat.Add(Models.TaskStatus.ToDo, toDo);
+            stat.Add(Models.TaskStatus.InProgress, inProg);
+            stat.Add(Models.TaskStatus.Finished, fin);
+            stat.Add(Models.TaskStatus.Bugs, bugs);
+
+
+            return PartialView("_ProjStatPartial", stat);
+        }
+
+
         // GET: Projects/Create
         public IActionResult Create()
         {

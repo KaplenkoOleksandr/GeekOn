@@ -1,0 +1,43 @@
+﻿@model Dictionary<Geekon.Models.TaskStatus, int>
+
+
+<div class="stat-text-icon">
+    <div class="stat-icon"><i class='bx bxs-grid-alt'></i></div>
+    <div class="stat-text">@Model.Values.Sum()</div>
+</div>
+
+@foreach (var s in Model)
+{
+
+    @if (s.Key == Geekon.Models.TaskStatus.ToDo)
+    {
+        <div class="stat-text-icon">
+            <div class="stat-icon"><i class='bx bx-square'></i></div>
+            <div class="stat-text">@s.Value</div>
+        </div>
+    }
+    @if (s.Key == Geekon.Models.TaskStatus.InProgress)
+    {
+        <div class="stat-text-icon">
+            <div class="stat-icon"><i class='bx bxs-hourglass'></i></div>
+            <div class="stat-text">@s.Value</div>
+        </div>
+    }
+    @if (s.Key == Geekon.Models.TaskStatus.Finished)
+    {
+        <div class="stat-text-icon">
+            <div class="stat-icon"><i class='bx bx-check-square'></i></div>
+            <div class="stat-text">@s.Value</div>
+        </div>
+    }
+    @if (s.Key == Geekon.Models.TaskStatus.Bugs)
+    {
+        <div class="stat-text-icon">
+            <div class="stat-icon"><i class='bx bx-bug'></i></div>
+            <div class="stat-text">@s.Value</div>
+        </div>
+    }
+}
+
+<div class="stat-text-icon stat-icon" style="margin-left: -10px"><i class='bx bx-dots-horizontal bx-rotate-180'></i></div>
+

@@ -175,7 +175,7 @@ namespace Geekon.Controllers
 
                 _context.Update(tasks);
                 await _context.SaveChangesAsync();
-                return PartialView("_partialEmpty");
+                return StatusCode(200);
             }
             catch
             {
@@ -195,7 +195,7 @@ namespace Geekon.Controllers
 
                 _context.Update(tasks);
                 await _context.SaveChangesAsync();
-                return PartialView("_partialEmpty");
+                return StatusCode(200);
             }
             catch
             {
@@ -236,7 +236,7 @@ namespace Geekon.Controllers
                 //delete task
                 _context.Tasks.Remove(tasks.FirstOrDefault());
                 _context.SaveChanges();
-                return PartialView("_partialEmpty");
+                return StatusCode(200);
             }
             catch (Exception e)
             {
