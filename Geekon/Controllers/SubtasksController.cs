@@ -158,10 +158,10 @@ namespace Geekon.Controllers
                 subtasks.TasksTaskId = arch;
                 subtasks.Archive = !subtasks.Archive;
 
-                var archTask = await _context.Tasks.FirstOrDefaultAsync(a => a.TaskId == subtasks.TasksTaskId);
+                var archTask = await _context.Tasks.FirstOrDefaultAsync(a => a.TaskId == subtasks.TasksTaskId && !a.Archive);
                 if (archTask == null)
                 {
-                    var firstTask = await _context.Tasks.FirstOrDefaultAsync(f => f.ProjectsProjId == proj.ProjectId && f.TaskId != subtasks.ArchiveTaskId);
+                    var firstTask = await _context.Tasks.FirstOrDefaultAsync(f => f.ProjectsProjId == proj.ProjectId && !f.Archive);
                     if (firstTask != null)
                         subtasks.TasksTaskId = firstTask.TaskId;
                     else
@@ -169,10 +169,10 @@ namespace Geekon.Controllers
                         Tasks newTask = new Tasks();
                         newTask.TaskName = "New category";
                         newTask.ProjectsProjId = proj.ProjectId;
+                        newTask.Projects = proj;
                         newTask.Archive = false;
                         newTask.Subtasks.Add(subtasks);
                         _context.Add(newTask);
-                        _context.SaveChanges();
 
                         subtasks.TasksTaskId = newTask.TaskId;
                     }

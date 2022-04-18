@@ -9,20 +9,20 @@
     }
 }
 
-<h2>Manage your account</h2>
-
-<div>
-    <h4>Change your account settings</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-3">
-            <partial name="_ManageNav" />
-        </div>
-        <div class="col-md-9">
-            @RenderBody()
+<div class="gradient">
+    <div class="user-modal">
+        <div class="row" style="width:100%; margin:0;">
+            <div class="col-md-4 user-change-container left">
+                <h2 style="color:white">Manage your account</h2>
+                <partial name="_ManageNav" />
+            </div>
+            <div class="col-md-8 user-change-container right">
+                @RenderBody()
+            </div>
         </div>
     </div>
 </div>
+
 
 @section Scripts {
     @RenderSection("Scripts", required: false)

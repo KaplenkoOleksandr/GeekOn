@@ -27,11 +27,11 @@
             <span class="tooltip">Projects</span>
         </li>
         <li>
-            <a href="#">
+            <a href="/Identity/Account/Manage/Index">
                 <i class='bx bx-user'></i>
-                <span class="links_name">User</span>
+                <span class="links_name">Account</span>
             </a>
-            <span class="tooltip">User</span>
+            <span class="tooltip">Account</span>
         </li>
         <li>
             <a href="#">
@@ -42,10 +42,9 @@
         </li>
         <li class="profile">
             <div class="profile-details">
-                <!--<img src="profile.jpg" alt="profileImg">-->
                 <div class="name_job">
-                    <div class="name">@SignInManager.UserManager.GetUserAsync(User).Result.Email</div>
-                    <div class="job">User</div>
+                    <div class="name">@SignInManager.UserManager.GetUserAsync(User).Result.UserName</div>
+                    <div class="job">@SignInManager.UserManager.GetUserAsync(User).Result.Email</div>
                 </div>
             </div>
             <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home")">

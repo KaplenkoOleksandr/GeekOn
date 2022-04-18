@@ -35,7 +35,7 @@
                                 <i class="bx bx-user"></i>
                             </div>
                             <div>
-                                <div class="projOwnerName">User name</div>
+                                <div class="projOwnerName">@userManager.FindByIdAsync(p.CreatorId).Result.UserName</div>
                                 <div class="projOwnerEmail">@userManager.FindByIdAsync(p.CreatorId).Result.Email</div>
                             </div>
                         </div>
@@ -59,9 +59,11 @@
                         <div class="projLine"></div>
                         <div class="projCreationDate">@p.DateCreate</div>
                         <div class="projOwnerInfo">
-                            <div class="projOwnerPhoto"></div>
+                            <div class="projOwnerPhoto">
+                                <i class="bx bx-user"></i>
+                            </div>
                             <div>
-                                <div class="projOwnerName">User name</div>
+                                <div class="projOwnerName">@userManager.FindByIdAsync(p.CreatorId).Result.UserName</div>
                                 <div class="projOwnerEmail">@userManager.FindByIdAsync(p.CreatorId).Result.Email</div>
                             </div>
                         </div>
@@ -78,19 +80,27 @@
         {
             @if (p.Archive)
             {
-                <a class="proj" href="@Url.Action("Index", "Projects", new { id = p.ProjectId })"
+                <a class="proj"
                    style="background: url('/projBack/@p.ProjImagePath'); background-size: contain;">
                     <div class="projSlider">
                         <div class="projName">@p.ProjName</div>
                         <div class="projLine"></div>
                         <div class="projCreationDate">@p.DateCreate</div>
                         <div class="projOwnerInfo">
-                            <div class="projOwnerPhoto"></div>
+                            <div class="projOwnerPhoto">
+                                <i class="bx bx-user"></i>
+                            </div>
                             <div>
-                                <div class="projOwnerName">User name</div>
+                                <div class="projOwnerName">@userManager.FindByIdAsync(p.CreatorId).Result.UserName</div>
                                 <div class="projOwnerEmail">@userManager.FindByIdAsync(p.CreatorId).Result.Email</div>
                             </div>
                         </div>
+                    </div>
+                    <div onclick="PROJ_DELETE(@p.ProjectId)">
+                        <i class='bx bxs-trash projFolder' style="left:206px; top:187px;" ></i>
+                    </div>
+                    <div onclick="PROJ_ANARCHIVE(@p.ProjectId)">
+                        <i class='bx bxs-archive-out projFolder' style="left:236px; top:187px;"></i>
                     </div>
                     <i class='bx bx-folder projFolder' title="Project Folder"></i>
                 </a>
@@ -98,3 +108,33 @@
         }
     </div>
 </div>
+<script>
+    function PROJ_ANARCHIVE(projId) {
+        $.ajax({
+            type: "POST",
+            url: "/Projects/AnArchive",
+            data: {
+                projId: projId,
+            },
+            success: function (res) {
+                window.location = "/Projects/Index/" + projId;
+            }
+        })
+    }
+
+    function PROJ_DELETE(projId) {
+        if (confirm("Confirm delete?")) {
+            $.ajax({
+                type: "POST",
+                url: "/Projects/Delete",
+                data: {
+                    id: projId,
+                },
+                success: function (res) {
+                    location.reload();
+                }
+            })
+        }
+    }
+
+</script>

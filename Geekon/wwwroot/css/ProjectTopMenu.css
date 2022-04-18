@@ -363,4 +363,22 @@
         cursor: pointer;
     }
 
+    /*     Statistic      */
 
+.stat-text-icon {
+    margin-right: 7px;
+    margin-top: 4px;
+    padding: 2px;
+    display: flex;
+    flex-direction: row;
+    color: white;
+}
+
+.stat-icon {
+   font-size: 20px;
+   margin-right: 4px;
+}
+
+.stat-text {
+    font-size: 18px;
+}

@@ -223,6 +223,47 @@ namespace Geekon.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Archive(int projId)
+        {
+            try
+            {
+                var proj = _context.Projects
+                    .Where(p => p.ProjectId == projId).FirstOrDefault();
+
+                proj.Archive = true;
+
+                _context.Update(proj);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "ProjectUsers");
+            }
+            catch
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AnArchive(int projId)
+        {
+            try
+            {
+                var proj = await _context.Projects
+                    .Where(p => p.ProjectId == projId).FirstOrDefaultAsync();
+
+                proj.Archive = false;
+
+                _context.Update(proj);
+                await _context.SaveChangesAsync();
+                return StatusCode(200);
+            }
+            catch
+            {
+                return NotFound();
+            }
+        }
+
+
         // GET: Projects/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -243,27 +284,40 @@ namespace Geekon.Controllers
 
         // POST: Projects/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var projects = await _context.Projects.FindAsync(id);
+            try
+            {
+                var projects = _context.Projects.Where(p => p.ProjectId == id).Include(p => p.Tasks);
 
-            //delete all connetions project with users
-            var projUsers = from pu in _context.ProjectUsers
-                            where pu.ProjectProjectId == id
-                            select pu;
-            foreach (var pu in projUsers)
-                _context.ProjectUsers.Remove(pu);
+                foreach (var t in projects.FirstOrDefault().Tasks)
+                {
+                    foreach (var s in t.Subtasks)
+                        _context.Subtasks.Remove(s);
+                    _context.Tasks.Remove(t);
+                }
 
-            //delete all tasks from project
-            foreach (var t in projects.Tasks)
-                _context.Tasks.Remove(t);
+                _context.SaveChanges();
 
-            //delete project
-            _context.Projects.Remove(projects);
+                //delete project
+                _context.Projects.Remove(projects.FirstOrDefault());
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+                //delete all connetions project with users
+                var projUsers = from pu in _context.ProjectUsers.AsNoTracking()
+                                where pu.ProjectProjectId == id
+                                select pu;
+                foreach (var pu in projUsers)
+                    _context.ProjectUsers.Remove(pu);
+
+
+                _context.SaveChanges();
+                return StatusCode(200);
+            }
+            catch
+            {
+                return NotFound();
+            }
+            
         }
 
         private bool ProjectsExists(int id)

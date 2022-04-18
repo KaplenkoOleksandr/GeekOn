@@ -9,12 +9,17 @@
 <div class="log-sign-in-container"  style="color:white">
     <div id="sign-in" class="sign-in">
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post" style="display:flex;
-                                                align-items: flex-start; 
-                                                flex-direction:column; 
-                                                justify-content:space-around; 
+                                                align-items: flex-start;
+                                                flex-direction:column;
+                                                justify-content:space-around;
                                                 height:100%; width:100%">
             <h1>Create a new account.</h1>
             <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="input-data">
+                <input asp-for="Input.Name" required />
+                <div class="underline"></div>
+                <label asp-for="Input.Name"></label>
+            </div>
             <div class="input-data">
                 <input asp-for="Input.Email" required />
                 <div class="underline"></div>

@@ -17,6 +17,31 @@
             </div>
 
             <div style="display:flex; justify-content:center; align-items:center">
+
+                <div style="margin-right: 15px; display:flex; flex-direction: row">
+                    <div class="stat-text-icon">
+                        <div class="stat-icon"><i class='bx bxs-grid-alt'></i></div>
+                        <div class="stat-text">200</div>
+                    </div>
+                    <div class="stat-text-icon">
+                        <div class="stat-icon"><i class='bx bx-square'></i></div>
+                        <div class="stat-text">200</div>
+                    </div>
+                    <div class="stat-text-icon">
+                        <div class="stat-icon"><i class='bx bxs-hourglass'></i></div>
+                        <div class="stat-text">200</div>
+                    </div>
+                    <div class="stat-text-icon">
+                        <div class="stat-icon"><i class='bx bx-check-square'></i></div>
+                        <div class="stat-text">200</div>
+                    </div>
+                    <div class="stat-text-icon">
+                        <div class="stat-icon"><i class='bx bx-bug'></i></div>
+                        <div class="stat-text">200</div>
+                    </div>
+                    <div class="stat-text-icon stat-icon" style="margin-left: -10px"><i class='bx bx-dots-horizontal bx-rotate-180'></i></div>
+                </div>
+
                 <details id="archive-in-proj">
                     <summary id="summary-archive" onclick="GET_PROJECT_DETAILS()">
                         Archive
@@ -53,6 +78,12 @@
                 <div class="icon-folder-in-proj">
                     <i class='bx bx-folder'></i>
                 </div>
+                <div class="icon-folder-in-proj" onclick="PROJ_ARCHIVE(@Model.ProjectId)">
+                    <i class='bx bxs-archive-in'></i>
+                </div>
+                <div class="icon-folder-in-proj" onclick="PROJ_DELETE(@Model.ProjectId)">
+                    <i class='bx bxs-trash'></i>
+                </div>
 
             </div>
         </div>
@@ -62,6 +93,35 @@
 
 <script src="~/js/Project.js"></script>
 <script>
+    function PROJ_ARCHIVE(projId) {
+        $.ajax({
+            type: "POST",
+            url: "/Projects/Archive",
+            data: {
+                projId: projId,
+            },
+            success: function (res) {
+                window.location = "/ProjectUsers/Index";
+            }
+        })
+    }
+
+    function PROJ_DELETE(projId) {
+        if (confirm("Confirm delete?")) {
+            $.ajax({
+                type: "POST",
+                url: "/Projects/Delete",
+                data: {
+                    id: projId,
+                },
+                success: function (res) {
+                window.location = "/ProjectUsers/Index";
+                }
+            })
+        }
+    }
+
+
     $.ajax({
         type: "GET",
         url: "/Tasks",
@@ -69,7 +129,7 @@
             projId: @Model.ProjectId,
         },
         success: function (res) {
-            $("#placeholderForTasks").html(res)
+            $("#placeholderForTasks").html(res);
         }
     })
 

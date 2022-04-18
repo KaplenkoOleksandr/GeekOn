@@ -46,13 +46,13 @@ namespace Geekon.Controllers
                                 where us.ProjectProjectId == projId
                                 select us;
 
-            List<string> usersEmail = new List<string>();
+            List<IdentityUser> users = new List<IdentityUser>();
             foreach (var user in _usersContext)
             {
-                usersEmail.Add(_userManager.FindByIdAsync(user.UserId).Result.Email);
+                users.Add(_userManager.FindByIdAsync(user.UserId).Result);
             }
 
-            return PartialView("_partialDetails", usersEmail);
+            return PartialView("_partialDetails", users);
         }
 
         // GET: ProjectUsers/Create

@@ -1,4 +1,5 @@
-﻿@model IEnumerable<string>
+﻿@using Microsoft.AspNetCore.Identity;
+@model IEnumerable<IdentityUser>
 
 
 @foreach (var e in Model)
@@ -7,8 +8,9 @@
         <div class="all-icon-user-in-proj">
             <i class='bx bx-user'></i>
         </div>
-        <div class="text-user-in-proj">
-            @e
+        <div style="flex-direction:column; width:85%">
+            <div class="text-user-in-proj">@e.UserName</div>
+            <div class="text-user-in-proj" style="font-size:14px;">@e.Email</div> 
         </div>
     </li>
 } 

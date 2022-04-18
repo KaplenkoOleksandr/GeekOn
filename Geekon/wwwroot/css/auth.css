@@ -127,6 +127,7 @@
     background-color: black;
     animation-duration: 1s;
     animation-name: michael-jackson-reverse;
+    padding: 20px;
 }
 /*============================================================*/
 
@@ -191,3 +192,141 @@
     align-self: center;
     border: none;
 }
+
+/*///////////// User Page  ////////////////*/
+
+.user-modal {
+    background-image: url('../images/forest.jpg');
+    background-size: cover;
+    height: 70vh;
+    width: 60%;
+    display: flex;
+}
+
+.user-change-container {
+    height: 100%;
+    width: 50%;
+    padding:0;
+}
+
+.left {
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    color:white;
+}
+
+.right {
+    width: 100%;
+    padding-left: 45px;
+    padding-top: 30px;
+    color: white;
+    background: rgba(0,0,0,0.5);
+}
+
+
+.user-button {
+    height: 50px;
+    width: 100%;
+    background-color: rgb(51 92 67);
+    margin-top: 10px;
+    border-radius: 10px;
+    padding: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.user-item {
+    color: white;
+    font-size: 19px;
+    padding: 0.4rem 0.7rem;
+    width: 100%;
+}
+
+.user-button:hover{
+    background-color: white;
+}
+.user-button:hover .user-item {
+    background-color: white;
+    color: rgb(51 92 67);
+}
+
+.user-icon {
+    margin-right: 8px;
+    font-size: 17px;
+}
+
+.save-button {
+    padding: 10px 20px 10px 20px;
+    border-radius: 20px;
+    background-color: #3f9617;
+    align-self: center;
+    border: none;
+    margin-top: 30px;
+}
+
+
+
+/* user-input */
+.user-input-data {
+    margin-top: 30px;
+    height: 40px;
+    width: 50%;
+    position: relative;
+}
+
+    .user-input-data input {
+        height: 100%;
+        width: 100%;
+        border: none;
+        font-size: 17px;
+        border-bottom: 2px solid silver;
+        background-color: transparent;
+        color: white;
+    }
+
+        .user-input-data input:focus ~ label,
+        .user-input-data input:valid ~ label {
+            transform: translateY(-20px);
+            font-size: 20px;
+            color: #3f9617;
+        }
+
+    .user-input-data label {
+        position: absolute;
+        bottom: 10px;
+        left: 0;
+        pointer-events: none;
+        transition: all 0.3s ease;
+    }
+
+    .user-input-data .underline {
+        position: absolute;
+        height: 2px;
+        width: 100%;
+        bottom: 0;
+    }
+
+        .user-input-data .underline:before {
+            position: absolute;
+            content: "";
+            height: 100%;
+            width: 100%;
+            background: #3f9617;
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 0.3s ease;
+        }
+
+    .user-input-data input:focus ~ .underline:before,
+    .user-input-data input:valid ~ .underline:before {
+        transform: scaleX(1);
+    }
+
+
+
+
