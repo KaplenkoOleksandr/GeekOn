@@ -9,16 +9,17 @@
 <div class="log-sign-in-container" style="color:white">
     <div class="log-in">
         <form id="account" method="post" style="display:flex;
-                                                align-items: flex-start; 
-                                                flex-direction:column; 
-                                                justify-content:space-around; 
-                                                height:100%; width:100%">
+                                                align-items: flex-start;
+                                                flex-direction:column;
+                                                justify-content:space-around;
+                                                height:90%; width:100%">
             <h1>Log in</h1>
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="input-data">
-                <input asp-for="Input.Name" required>
+                <input asp-for="Input.Email" required>
                 <div class="underline"></div>
-                <label asp-for="Input.Name"></label>
+                <label asp-for="Input.Email"></label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="input-data">
                 <input asp-for="Input.Password" required>
@@ -26,29 +27,39 @@
                 <label asp-for="Input.Password"></label>
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
-            <div class="form-group" style="align-self:end">
-                <div class="checkbox">
-                    <label asp-for="Input.RememberMe">
-                        <input asp-for="Input.RememberMe" />
-                        @Html.DisplayNameFor(m => m.Input.RememberMe)
-                    </label>
-                </div>
-            </div>
             <div class="form-group" style="align-self:center">
                 <button type="submit" class="log-sign-in-button">Log in</button>
+            </div>
+        </form>
+        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <div>
+                @foreach (var provider in Model.ExternalLogins)
+                {
+                    if (provider.DisplayName == "Google")
+                    {
+                        <button type="submit" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                    }
+                    else if (provider.DisplayName == "Facebook")
+                    {
+                        <button type="submit" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                    }
+                    else
+                    {
+                        <button type="submit" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                    }
+                }
             </div>
         </form>
     </div>
 </div>
 <div class="log-sign-in-container"></div>
 
-<div class="auth-central-button auth-central-button-animation"  style="cursor: pointer;" onclick="window.location='/Identity/Account/Register';">
-        <div class="auth-central-button-animation">
-            <div id="upper-arrow" class="upper-arrow"></div>
-            <div id="lower-arrow" class="lower-arrow"></div>
-        </div>
+<div class="auth-central-button auth-central-button-animation" style="cursor: pointer;" onclick="window.location='/Identity/Account/Register';">
+    <div class="auth-central-button-animation">
+        <div id="upper-arrow" class="upper-arrow"></div>
+        <div id="lower-arrow" class="lower-arrow"></div>
+    </div>
 </div>
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Geekon.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,18 +12,18 @@ namespace Geekon.Areas.Identity.Pages.Account.Manage
 {
     public partial class IndexModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
         public IndexModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
         }
 
-        public string Username { get; set; }
+        public string Name { get; set; }
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -37,15 +38,11 @@ namespace Geekon.Areas.Identity.Pages.Account.Manage
 
         }
 
-        private async Task LoadAsync(IdentityUser user)
+        private async Task LoadAsync(ApplicationUser user)
         {
-            var userName = await _userManager.GetUserNameAsync(user);
-
-            Username = userName;
-
             Input = new InputModel
             {
-                Name = userName
+                Name = user.Name
             };
         }
 
@@ -75,12 +72,13 @@ namespace Geekon.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            var userName = await _userManager.GetUserNameAsync(user);
+            var userName = user.Name;
+
             if (Input.Name != userName)
             {
-                var setNameResult = await _userManager.SetUserNameAsync(user, Input.Name);
-                if (!setNameResult.Succeeded)
-                {
+                user.Name = Input.Name;
+                var success = await _userManager.UpdateAsync(user);
+                if (!success.Succeeded) {
                     StatusMessage = "Unexpected error when trying to set name.";
                     return RedirectToPage();
                 }

@@ -7,15 +7,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Geekon.Models;
 using Microsoft.AspNetCore.Identity;
+using Geekon.Data;
 
 namespace Geekon.Controllers
 {
     public class TasksController : Controller
     {
         private readonly GeekOnDBContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public TasksController(GeekOnDBContext context, UserManager<IdentityUser> userManager)
+        public TasksController(GeekOnDBContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;

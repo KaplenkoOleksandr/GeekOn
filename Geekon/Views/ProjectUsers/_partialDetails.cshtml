@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity;
-@model IEnumerable<IdentityUser>
+@using Geekon.Data;
+@model IEnumerable<ApplicationUser>
 
 
 @foreach (var e in Model)
@@ -9,7 +10,7 @@
             <i class='bx bx-user'></i>
         </div>
         <div style="flex-direction:column; width:85%">
-            <div class="text-user-in-proj">@e.UserName</div>
+            <div class="text-user-in-proj">@e.Name</div>
             <div class="text-user-in-proj" style="font-size:14px;">@e.Email</div> 
         </div>
     </li>

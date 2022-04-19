@@ -15,16 +15,17 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using System.Threading;
 using Google.Apis.Util.Store;
+using Geekon.Data;
 
 namespace Geekon.Controllers
 {
     public class ProjectsController : Controller
     {
         private readonly GeekOnDBContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IWebHostEnvironment _env;
 
-        public ProjectsController(GeekOnDBContext context, IWebHostEnvironment env, UserManager<IdentityUser> userManager)
+        public ProjectsController(GeekOnDBContext context, IWebHostEnvironment env, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;

@@ -1,7 +1,7 @@
 ﻿@model Geekon.Models.Subtasks
-
+@using Geekon.Data;
 @using Microsoft.AspNetCore.Identity
-@inject UserManager<IdentityUser> userManager
+@inject UserManager<ApplicationUser> userManager
 
 
     <div class="modal" id="editSubtask">

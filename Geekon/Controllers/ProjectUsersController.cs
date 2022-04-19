@@ -7,15 +7,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Geekon.Models;
 using Microsoft.AspNetCore.Identity;
+using Geekon.Data;
 
 namespace Geekon.Controllers
 {
     public class ProjectUsersController : Controller
     {
         private readonly GeekOnDBContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ProjectUsersController(GeekOnDBContext context, UserManager<IdentityUser> userManager)
+        public ProjectUsersController(GeekOnDBContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -46,7 +47,7 @@ namespace Geekon.Controllers
                                 where us.ProjectProjectId == projId
                                 select us;
 
-            List<IdentityUser> users = new List<IdentityUser>();
+            List<ApplicationUser> users = new List<ApplicationUser>();
             foreach (var user in _usersContext)
             {
                 users.Add(_userManager.FindByIdAsync(user.UserId).Result);

@@ -1,9 +1,9 @@
 ﻿@model IEnumerable<Geekon.Models.Projects>
 @using Microsoft.AspNetCore.Identity;
 @using System.Security.Claims
-
+@using Geekon.Data;
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor
-@inject UserManager<IdentityUser> userManager
+@inject UserManager<ApplicationUser> userManager
 
 @{
     ViewData["Title"] = "Index";
@@ -35,7 +35,7 @@
                                 <i class="bx bx-user"></i>
                             </div>
                             <div>
-                                <div class="projOwnerName">@userManager.FindByIdAsync(p.CreatorId).Result.UserName</div>
+                                <div class="projOwnerName">@userManager.FindByIdAsync(p.CreatorId).Result.Name</div>
                                 <div class="projOwnerEmail">@userManager.FindByIdAsync(p.CreatorId).Result.Email</div>
                             </div>
                         </div>
@@ -63,7 +63,7 @@
                                 <i class="bx bx-user"></i>
                             </div>
                             <div>
-                                <div class="projOwnerName">@userManager.FindByIdAsync(p.CreatorId).Result.UserName</div>
+                                <div class="projOwnerName">@userManager.FindByIdAsync(p.CreatorId).Result.Name</div>
                                 <div class="projOwnerEmail">@userManager.FindByIdAsync(p.CreatorId).Result.Email</div>
                             </div>
                         </div>
@@ -91,13 +91,13 @@
                                 <i class="bx bx-user"></i>
                             </div>
                             <div>
-                                <div class="projOwnerName">@userManager.FindByIdAsync(p.CreatorId).Result.UserName</div>
+                                <div class="projOwnerName">@userManager.FindByIdAsync(p.CreatorId).Result.Name</div>
                                 <div class="projOwnerEmail">@userManager.FindByIdAsync(p.CreatorId).Result.Email</div>
                             </div>
                         </div>
                     </div>
                     <div onclick="PROJ_DELETE(@p.ProjectId)">
-                        <i class='bx bxs-trash projFolder' style="left:206px; top:187px;" ></i>
+                        <i class='bx bxs-trash projFolder' style="left:206px; top:187px;"></i>
                     </div>
                     <div onclick="PROJ_ANARCHIVE(@p.ProjectId)">
                         <i class='bx bxs-archive-out projFolder' style="left:236px; top:187px;"></i>
