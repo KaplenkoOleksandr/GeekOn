@@ -1,4 +1,4 @@
-﻿@model Dictionary<Geekon.Models.TaskStatus, int>
+﻿@model Dictionary<Geekon.Models.TaskStatus, double>
 
     <!doctype html>
     <html>
@@ -8,21 +8,36 @@
         <link rel="stylesheet" href="~/css/stat.css">
     </head>
     <body>
-
-        <div class="gradient">
-            <div class="stat-modal">
-                <div class="column" style="width:100%; margin:0;">
-                    <h2 style="color:white; display:flex; align-items:center; justify-content: center;">Your statistics</h2>
-                    <div class="user-change-container">
-                        <div class="pie animate" style="--p:90;--c:lightgreen; color:white;"> 90% </div>
-
-                    </div>
-                    <div class="col-md-4 user-change-container">
-
-
-                    </div>
+        <div class="gradient" style="display: flex; flex-direction: column; justify-content: flex-start; padding-top: 30px;">
+            <h1 style="color:white; display:flex; align-items:center; justify-content: center; vertical-align: top; margin-bottom: 30px;">
+                Your statistics</h1>
+                <div style="width:510px; height: 170px; display: flex; justify-content: space-around;">
+                    @foreach (var s in Model)
+                    {
+                        @if (s.Key == Geekon.Models.TaskStatus.ToDo)
+                        {
+                    <div class="pie animate" style="--p:@(Math.Round(s.Value / Model.Values.Sum() * 100));--c:lightgreen; color:white;">@(Math.Round(s.Value / Model.Values.Sum() * 100))% </div>
+                        }
+                        @if (s.Key == Geekon.Models.TaskStatus.InProgress)
+                        {
+                <div class="pie animate" style="--p:@(Math.Round(s.Value / Model.Values.Sum() * 100));--c:lightgreen; color:white; transform: scale(-1, 1);"> <div style="transform: scale(-1, 1);">@(Math.Round(s.Value / Model.Values.Sum() * 100))% </div>  </div>
+                        }
+                     }
                 </div>
-            </div>
+                <div style="width:780px; height: 170px; display: flex; justify-content: space-between;">
+                    @foreach (var s in Model)
+                    {
+                        @if (s.Key == Geekon.Models.TaskStatus.Bugs)
+                        {
+                    <div class="pie animate" style="--p:@(Math.Round(s.Value / Model.Values.Sum() * 100));--c:lightgreen; color:white;">@(Math.Round(s.Value / Model.Values.Sum() * 100))% </div>
+                        }
+                        @if (s.Key == Geekon.Models.TaskStatus.Finished)
+                        {
+                <div class="pie animate" style="--p:@(Math.Round(s.Value / Model.Values.Sum() * 100));--c:lightgreen; color:white; transform: scale(-1, 1);"> <div style="transform: scale(-1, 1);">@(Math.Round(s.Value / Model.Values.Sum() * 100))% </div>  </div>
+                        }
+                     }
+                </div>
+                <div class="pie animate" style="--p:100;--c:lightgreen; color:white; transform: translateY(-50%);"> 100% </div>
         </div>
     </body>
 </html>

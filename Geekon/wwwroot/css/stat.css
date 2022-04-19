@@ -1,4 +1,9 @@
-﻿.gradient {
+﻿* {
+    margin: 0;
+    padding: 0;
+}
+
+.gradient {
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -30,7 +35,6 @@
     font-size: 17px;
 }
 
-
 /* pie chart */
 
 @property --p {
@@ -43,7 +47,7 @@
     --p: 20;
     --b: 22px;
     --c: darkred;
-    --w: 150px;
+    --w: 160px;
     width: var(--w);
     aspect-ratio: 1;
     position: relative;
@@ -92,4 +96,3 @@
         --p: 0
     }
 }
-
