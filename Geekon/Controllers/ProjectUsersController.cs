@@ -130,7 +130,7 @@ namespace Geekon.Controllers
                         }
                     }
                 }
-                return PartialView();
+                return StatusCode(200);
             }
             catch
             {

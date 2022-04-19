@@ -133,6 +133,7 @@ namespace Geekon.Controllers
                 if(subtasks.ExecutorId == "iamexecutor")
                 {
                     subtasks.ExecutorId = _userManager.GetUserId(User);
+                    subtasks.Status = Models.TaskStatus.InProgress;
                 }
 
                 _context.Update(subtasks);
@@ -181,7 +182,7 @@ namespace Geekon.Controllers
 
                 _context.Update(subtasks);
                 await _context.SaveChangesAsync();
-                return PartialView("_PartialAnArchive");
+                return StatusCode(200);
             }
             catch
             {

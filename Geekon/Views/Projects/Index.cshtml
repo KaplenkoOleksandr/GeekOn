@@ -18,28 +18,8 @@
 
             <div style="display:flex; justify-content:center; align-items:center">
 
-                <div style="margin-right: 15px; display:flex; flex-direction: row">
-                    <div class="stat-text-icon">
-                        <div class="stat-icon"><i class='bx bxs-grid-alt'></i></div>
-                        <div class="stat-text">200</div>
-                    </div>
-                    <div class="stat-text-icon">
-                        <div class="stat-icon"><i class='bx bx-square'></i></div>
-                        <div class="stat-text">200</div>
-                    </div>
-                    <div class="stat-text-icon">
-                        <div class="stat-icon"><i class='bx bxs-hourglass'></i></div>
-                        <div class="stat-text">200</div>
-                    </div>
-                    <div class="stat-text-icon">
-                        <div class="stat-icon"><i class='bx bx-check-square'></i></div>
-                        <div class="stat-text">200</div>
-                    </div>
-                    <div class="stat-text-icon">
-                        <div class="stat-icon"><i class='bx bx-bug'></i></div>
-                        <div class="stat-text">200</div>
-                    </div>
-                    <div class="stat-text-icon stat-icon" style="margin-left: -10px"><i class='bx bx-dots-horizontal bx-rotate-180'></i></div>
+                <div style="margin-right: 15px; display:flex; flex-direction: row" id="statistic">
+                   
                 </div>
 
                 <details id="archive-in-proj">
@@ -93,6 +73,20 @@
 
 <script src="~/js/Project.js"></script>
 <script>
+    function PROJ_STAT(projId) {
+        $.ajax({
+            type: "GET",
+            url: "/Projects/Statistic",
+            data: {
+                projId: projId,
+            },
+            success: function (res) {
+                $("#statistic").html(res)
+            }
+        })
+    }
+    PROJ_STAT(@Model.ProjectId);
+
     function PROJ_ARCHIVE(projId) {
         $.ajax({
             type: "POST",

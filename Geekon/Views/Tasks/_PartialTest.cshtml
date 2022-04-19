@@ -76,6 +76,7 @@
                         },
                         success: function (res) {
                             $("#placeholderForTasks").html(res);
+                            PROJ_STAT(@ViewBag.projId);
                         }
                     })
                 }
@@ -99,6 +100,7 @@
                     },
                     success: function (res) {
                         $("#placeholderForTasks").html(res);
+                        PROJ_STAT(@ViewBag.projId);
                     }
                 })
             }
@@ -154,6 +156,7 @@
                     },
                     success: function (res) {
                         $("#placeholderForTasks").html(res);
+                        PROJ_STAT(@ViewBag.projId);
                     }
                 })
             }
@@ -178,6 +181,7 @@
                         success: function (res) {
                             $("#editSubtaskPlaceholder").find('.modal').modal('hide');
                             $("#placeholderForTasks").html(res);
+                            PROJ_STAT(@ViewBag.projId);
                         }
                     })
                 }
@@ -216,6 +220,7 @@
                     },
                     success: function (res) {
                         $("#placeholderForTasks").html(res);
+                        PROJ_STAT(@ViewBag.projId);
                     }
                 })
             }
@@ -237,7 +242,8 @@
                         projId: projId,
                     },
                     success: function (res) {
-                        $("#placeholderForTasks").html(res)
+                        $("#placeholderForTasks").html(res);
+                        PROJ_STAT(@ViewBag.projId);
                     }
                 })
             }

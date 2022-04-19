@@ -20,6 +20,9 @@
             <div class="all-icon-archive-in-proj" onclick="SUB_ANARCHIVE(@s.SubtaskId)">
                 <i class='bx bxs-archive-out'></i>
             </div>
+            <div class="all-icon-archive-in-proj" onclick="DELETE_SUBTASK(@s.SubtaskId)">
+                <i class='bx bxs-trash'></i>
+            </div>
         </li>
 
     }
@@ -44,6 +47,65 @@
             <div class="all-icon-archive-in-proj" onclick="TASK_ANARCHIVE(@t.TaskId)">
                 <i class='bx bxs-archive-out'></i>
             </div>
+            <div class="all-icon-archive-in-proj" onclick="TASK_DELETE(@t.TaskId)">
+                <i class='bx bxs-trash'></i>
+            </div>
         </li>
     }
 }
+
+<script>
+    function TASK_DELETE(taskId) {
+        if (confirm("Confirm delete?")) {
+            $.ajax({
+                type: "POST",
+                url: "/Tasks/Delete",
+                data: {
+                    taskId: taskId,
+                },
+                success: function (res) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/Tasks",
+                        data: {
+                            projId: @Model.FirstOrDefault().ProjectsProjId,
+                        },
+                        success: function (res) {
+                            $("#placeholderForTasks").html(res);
+                            PROJ_STAT(@Model.FirstOrDefault().ProjectsProjId);
+                            GET_PROJECT_DETAILS();
+                        }
+                    })
+                }
+            })
+        }
+    }
+
+    function DELETE_SUBTASK(id) {
+        if (confirm("Confirm DELETE?")) {
+            $.ajax({
+                type: "POST",
+                url: "/Subtasks/DELETE",
+                data: {
+                    id: id,
+                },
+                success: function (res) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/Tasks",
+                        data: {
+                            projId: @Model.FirstOrDefault().ProjectsProjId,
+                        },
+                        success: function (res) {
+                            $("#editSubtaskPlaceholder").find('.modal').modal('hide');
+                            $("#placeholderForTasks").html(res);
+                            PROJ_STAT(@Model.FirstOrDefault().ProjectsProjId);
+                            GET_PROJECT_DETAILS();
+                        }
+                    })
+                }
+            })
+        }
+    }
+
+</script>
