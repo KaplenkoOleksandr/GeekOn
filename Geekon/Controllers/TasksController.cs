@@ -22,6 +22,10 @@ namespace Geekon.Controllers
             _userManager = userManager;
         }
 
+        public TasksController()
+        {
+        }
+
         // GET: Tasks
         public async Task<IActionResult> Index(int? projId)
         {

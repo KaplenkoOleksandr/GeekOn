@@ -2,7 +2,7 @@
 
 @foreach (var task in Model)
 {
-    <div class="item" onmousedown="stopProp(event)">
+    <div id="@task.TaskId" class="item" onmousedown="stopProp(event)" ondrop="dropIt(event)" ondragover="allowDrop(event)">
         <div class="item-name-text">
             <input id="taskName{@task.TaskId}" class="taskName" type="text" value="@task.TaskName" onfocusout="EDIT_TASK_SUBMIT(@task.TaskId)" />
 
@@ -14,10 +14,10 @@
                 <i class='bx bx-menu lines' id="btn"></i>
             </div>
         </div>
-        <div class="sub-item-container">
+        <div class="sub-item-container" id="container{@task.TaskId}">
             @foreach (var sub in task.Subtasks.Distinct())
             {
-                <div class="sub-item" onclick="OPEN_MODAL_SUBTASK_EDIT(@sub.SubtaskId)">
+                <div id="s{@sub.SubtaskId" class="sub-item" draggable="true" ondragstart="dragStart(event)" onclick="OPEN_MODAL_SUBTASK_EDIT(@sub.SubtaskId)">
                     <div class="sub-item-header">
                         <div class="sub-item-name">@sub.SubtaskName</div>
                         <div class="sub-item-date">@sub.Date</div>
@@ -36,7 +36,7 @@
             }
 
             @*SUBTASK ADD SQUARE*@
-            <div class="sub-item sub-item-create" onclick="POST_CREATE_SUBTASK(@task.TaskId, @ViewBag.projId)">
+            <div class="sub-item sub-item-create" id="add{@task.TaskId}" onclick="POST_CREATE_SUBTASK(@task.TaskId, @ViewBag.projId)">
                 <i class='bx bx-plus'></i>
                 <div>Add new task</div>
             </div>
@@ -54,6 +54,49 @@
 </a>
 
 <script>
+
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+    function dragStart(ev) {
+        ev.dataTransfer.setData("text/plain", ev.target.id);
+    }
+    function dropIt(ev) {
+        ev.preventDefault();
+        let sourceId = ev.dataTransfer.getData("text/plain");
+        let sourceIdEl = document.getElementById(sourceId);
+        let sourceIdParentEl = sourceIdEl.parentElement.parentElement;
+        let targetEl = document.getElementById(ev.target.id)
+        let targetParentEl = targetEl.parentElement;
+        if (targetParentEl.id.includes("add{") || targetParentEl.id.includes("container")) {
+            targetParentEl = targetParentEl.parentElement;
+        }
+
+        if (targetParentEl.id !== sourceIdParentEl.id) {
+            if (targetParentEl.className === sourceIdParentEl.className) {
+                $.ajax({
+                type: "POST",
+                url: "/Subtasks/TaskIdEdit",
+                data: {
+                    taskId: targetParentEl.id,
+                    subId: sourceIdEl.id.replace("s{", "")
+                },
+                success: function (res) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/Tasks",
+                        data: {
+                            projId: @ViewBag.projId,
+                        },
+                        success: function (res) {
+                            $("#placeholderForTasks").html(res);
+                        }
+                    })
+                }
+            })
+            }
+        }
+    }
 
     function stopProp(event) {
         event.stopPropagation();

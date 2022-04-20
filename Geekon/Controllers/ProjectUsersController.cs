@@ -22,6 +22,10 @@ namespace Geekon.Controllers
             _userManager = userManager;
         }
 
+        public ProjectUsersController()
+        {
+        }
+
         // GET: ProjectUsers
         public async Task<IActionResult> Index()
         {

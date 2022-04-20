@@ -32,6 +32,10 @@ namespace Geekon.Controllers
             _env = env;
         }
 
+        public ProjectsController()
+        {
+        }
+
         public IActionResult SomeAct(int? id)
         {
             return PartialView("_PartialTest");

@@ -48,7 +48,6 @@
 .item {
     display: inline-block;
     background-color: #bbbbbbad;
-    min-height: 250px;
     max-height: 90vh;
     width: 300px;
     margin: 20px 10px;

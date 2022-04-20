@@ -22,6 +22,10 @@ namespace Geekon.Controllers
             _userManager = userManager;
         }
 
+        public SubtasksController()
+        {
+        }
+
         // GET: Subtasks
         public async Task<IActionResult> Index(int? taskId)
         {
@@ -113,6 +117,24 @@ namespace Geekon.Controllers
                 return NotFound();
             }
             return PartialView("_PartialSubtaskEdit", subtasks);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> TaskIdEdit(int? taskId, int? subId)
+        {
+            try
+            {
+                var subtask = await _context.Subtasks.FindAsync(subId);
+                subtask.TasksTaskId = (int)taskId;
+
+                _context.Update(subtask);
+                await _context.SaveChangesAsync();
+                return StatusCode(200);
+            }
+            catch
+            {
+                return StatusCode(400);
+            }
         }
 
         // POST: Subtasks/Edit/5
