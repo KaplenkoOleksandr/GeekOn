@@ -46,7 +46,7 @@ namespace Geekon.Controllers
 
             var subtasks = from s in _context.Subtasks
                            join t in tasks on s.TasksTaskId equals t.TaskId
-                           where !s.Archive
+                           where !s.Archive && s.ExecutorId == _userManager.GetUserId(User)
                            select s;
 
             double toDo = 0, inProg = 0, fin = 0, bugs = 0;

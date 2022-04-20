@@ -133,7 +133,6 @@ namespace Geekon.Controllers
                 if(subtasks.ExecutorId == "iamexecutor")
                 {
                     subtasks.ExecutorId = _userManager.GetUserId(User);
-                    subtasks.Status = Models.TaskStatus.InProgress;
                 }
 
                 _context.Update(subtasks);

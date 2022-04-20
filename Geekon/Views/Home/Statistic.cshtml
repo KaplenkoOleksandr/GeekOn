@@ -10,34 +10,78 @@
     <body>
         <div class="gradient" style="display: flex; flex-direction: column; justify-content: flex-start; padding-top: 30px;">
             <h1 style="color:white; display:flex; align-items:center; justify-content: center; vertical-align: top; margin-bottom: 30px;">
-                Your statistics</h1>
-                <div style="width:510px; height: 170px; display: flex; justify-content: space-around;">
-                    @foreach (var s in Model)
+                Your statistics
+            </h1>
+            <div style="width:510px; height: 170px; display: flex; justify-content: space-around;">
+                @foreach (var s in Model)
+                {
+                    @if (s.Key == Geekon.Models.TaskStatus.ToDo)
                     {
-                        @if (s.Key == Geekon.Models.TaskStatus.ToDo)
-                        {
-                    <div class="pie animate" style="--p:@(Math.Round(s.Value / Model.Values.Sum() * 100));--c:lightgreen; color:white;">@(Math.Round(s.Value / Model.Values.Sum() * 100))% </div>
-                        }
-                        @if (s.Key == Geekon.Models.TaskStatus.InProgress)
-                        {
-                <div class="pie animate" style="--p:@(Math.Round(s.Value / Model.Values.Sum() * 100));--c:lightgreen; color:white; transform: scale(-1, 1);"> <div style="transform: scale(-1, 1);">@(Math.Round(s.Value / Model.Values.Sum() * 100))% </div>  </div>
-                        }
-                     }
-                </div>
-                <div style="width:780px; height: 170px; display: flex; justify-content: space-between;">
-                    @foreach (var s in Model)
+                        <div class="pie animate" style="--p:@(Math.Round(s.Value / Model.Values.Sum() * 100));--c:#c9ee90; color:white;">
+                            <div class="stat-text-icon">
+                                <div class="stat-icon"><i class='bx bx-square'></i></div>
+                                <div class="stat-text">@s.Value</div>
+                            </div>
+                            @(Math.Round(s.Value / Model.Values.Sum() * 100))%
+                        </div>
+                    }
+                    @if (s.Key == Geekon.Models.TaskStatus.InProgress)
                     {
-                        @if (s.Key == Geekon.Models.TaskStatus.Bugs)
-                        {
-                    <div class="pie animate" style="--p:@(Math.Round(s.Value / Model.Values.Sum() * 100));--c:lightgreen; color:white;">@(Math.Round(s.Value / Model.Values.Sum() * 100))% </div>
-                        }
-                        @if (s.Key == Geekon.Models.TaskStatus.Finished)
-                        {
-                <div class="pie animate" style="--p:@(Math.Round(s.Value / Model.Values.Sum() * 100));--c:lightgreen; color:white; transform: scale(-1, 1);"> <div style="transform: scale(-1, 1);">@(Math.Round(s.Value / Model.Values.Sum() * 100))% </div>  </div>
-                        }
-                     }
+                        <div class="pie animate" style="--p:@(Math.Round(s.Value / Model.Values.Sum() * 100));--c:#90eed7; color:white; transform: scale(-1, 1);">
+                            <div style="transform: scale(-1, 1);">
+                                <div class="stat-text-icon">
+                                    <div class="stat-icon"><i class='bx bxs-hourglass'></i></div>
+                                    <div class="stat-text">@s.Value</div>
+                                </div>
+                                @(Math.Round(s.Value / Model.Values.Sum() * 100))%
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+            <div style="width:780px; height: 170px; display: flex; justify-content: space-between;">
+                @foreach (var s in Model)
+                {
+                    @if (s.Key == Geekon.Models.TaskStatus.Bugs)
+                    {
+                        <div class="pie animate" style="--p:@(Math.Round(s.Value / Model.Values.Sum() * 100));--c:#eeb590; color:white;">
+                            <div class="stat-text-icon">
+                                <div class="stat-icon"><i class='bx bx-bug'></i></div>
+                                <div class="stat-text">@s.Value</div>
+                            </div>
+                            @(Math.Round(s.Value / Model.Values.Sum() * 100))%
+                        </div>
+                    }
+                    @if (s.Key == Geekon.Models.TaskStatus.Finished)
+                    {
+                        <div class="pie animate" style="--p:@(Math.Round(s.Value / Model.Values.Sum() * 100));--c:#90b5ee; color:white; transform: scale(-1, 1);">
+                            <div style="transform: scale(-1, 1);">
+                                <div class="stat-text-icon">
+                                    <div class="stat-icon"><i class='bx bx-check-square'></i></div>
+                                    <div class="stat-text">@s.Value</div>
+                                </div>
+                                @(Math.Round(s.Value / Model.Values.Sum() * 100))%
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+            <div class="pie animate" style="--p: 100; --c: #9890ee; color: white; transform: translateY(-50%);">
+                <div class="stat-text-icon">
+                    <div class="stat-icon"><i class='bx bxs-grid-alt'></i></div>
+                    <div class="stat-text">@Model.Values.Sum()</div>
                 </div>
-                <div class="pie animate" style="--p:100;--c:lightgreen; color:white; transform: translateY(-50%);"> 100% </div>
+                100%
+            </div>
+
+            <div class="inprogress">
+                <div class="progress " style="width:200px;">
+                    <div style="margin: 2px 0 0 7px;">20 punctual</div>
+                </div>
+                <div class="anprogress " style="width:300px;">
+                    <div style="margin: 2px 7px 0 0;"> 30 overdue </div>
+                </div>
+            </div>
         </div>
     </body>
 </html>
