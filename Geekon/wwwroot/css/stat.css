@@ -1,4 +1,9 @@
-﻿.gradient {
+﻿* {
+    margin: 0;
+    padding: 0;
+}
+
+.gradient {
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -31,6 +36,36 @@
 }
 
 
+.inprogress {
+    width: 520px;
+    height: 30px;
+    border-radius: 15px;
+    background-color: #576b60c7;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.progress {
+    height: 30px;
+    border-radius: 15px;
+    background-color: #68aa9a;
+    color: white;
+    display: flex;
+    justify-content: flex-start;
+    font-size: 17px;
+}
+
+.anprogress {
+    height: 30px;
+    border-radius: 15px;
+    background-color: #d2a080;
+    color: white;
+    display: flex;
+    justify-content: flex-end;
+    font-size: 17px;
+}
+
 /* pie chart */
 
 @property --p {
@@ -43,7 +78,7 @@
     --p: 20;
     --b: 22px;
     --c: darkred;
-    --w: 150px;
+    --w: 160px;
     width: var(--w);
     aspect-ratio: 1;
     position: relative;
@@ -64,7 +99,7 @@
 
     .pie:before {
         inset: 0;
-        background: radial-gradient(farthest-side,var(--c) 98%,#0000) top/var(--b) var(--b) no-repeat, conic-gradient(var(--c) calc(var(--p)*1%),#0000 0);
+        background: radial-gradient(farthest-side,var(--c) 98%,#0000) top/var(--b) var(--b) no-repeat, conic-gradient(var(--c) calc(var(--p)*1%),#576b60c7 0);
         -webkit-mask: radial-gradient(farthest-side,#0000 calc(99% - var(--b)),#000 calc(100% - var(--b)));
         mask: radial-gradient(farthest-side,#0000 calc(99% - var(--b)),#000 calc(100% - var(--b)));
     }
@@ -92,4 +127,3 @@
         --p: 0
     }
 }
-
